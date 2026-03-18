@@ -283,10 +283,10 @@ function SEOIntroSection() {
           <p>Selv om jeg er lokal i Midtjylland, tilbyder jeg også professionel algerens i hele Danmark. Det betyder, at både private og erhverv kan få renset udendørs overflader hos mig.</p>
           <p>
             Når jeg arbejder lokalt, tilbyder jeg for eksempel professionel{' '}
-            <Link href="/fliserens-herning" className="text-primary hover:underline font-medium">fliserens i Herning</Link>,{' '}
-            <Link href="/fliserens-ikast" className="text-primary hover:underline font-medium">fliserens i Ikast</Link>,{' '}
-            <Link href="/fliserens-brande" className="text-primary hover:underline font-medium">fliserens i Brande</Link>,{' '}
-            <Link href="/fliserens-give" className="text-primary hover:underline font-medium">fliserens i Give</Link> og omegn.
+            <Link href="/fliserens-i-herning" className="text-primary hover:underline font-medium">fliserens i Herning</Link>,{' '}
+            <Link href="/fliserens-i-ikast" className="text-primary hover:underline font-medium">fliserens i Ikast</Link>,{' '}
+            <Link href="/fliserens-i-brande" className="text-primary hover:underline font-medium">fliserens i Brande</Link>,{' '}
+            <Link href="/fliserens-i-give" className="text-primary hover:underline font-medium">fliserens i Give</Link> og omegn.
           </p>
           <p>Derfor bruger jeg kun miljøvenlige løsninger og professionelt udstyr. På den måde sikrer jeg et flot resultat, der holder i lang tid. Samtidig følger jeg altid de retningslinjer, som Miljøstyrelsen anbefaler for brug af rensemidler udendørs.</p>
         </div>
