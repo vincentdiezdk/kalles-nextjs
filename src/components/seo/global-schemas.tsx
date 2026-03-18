@@ -1,7 +1,3 @@
-"use client";
-
-import { useEffect } from "react";
-
 const localBusiness = {
   "@context": "https://schema.org",
   "@type": "HomeAndConstructionBusiness",
@@ -142,18 +138,15 @@ const webSite = {
 const schemas = [localBusiness, organization, webSite];
 
 export default function GlobalSchemas() {
-  useEffect(() => {
-    const scripts: HTMLScriptElement[] = [];
-    for (const schema of schemas) {
-      const script = document.createElement("script");
-      script.type = "application/ld+json";
-      script.textContent = JSON.stringify(schema);
-      document.head.appendChild(script);
-      scripts.push(script);
-    }
-    return () => {
-      for (const s of scripts) s.remove();
-    };
-  }, []);
-  return null;
+  return (
+    <>
+      {schemas.map((schema, i) => (
+        <script
+          key={i}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        />
+      ))}
+    </>
+  );
 }

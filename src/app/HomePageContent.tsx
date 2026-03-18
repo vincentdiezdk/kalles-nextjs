@@ -70,43 +70,31 @@ function HeroSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
           <div>
-            <div className="inline-flex items-center gap-2 bg-primary/10 text-primary text-sm font-medium px-4 py-1.5 rounded-full mb-6">
-              <CheckCircle className="h-4 w-4" />
-              Miljøgodkendt af Miljøstyrelsen
-            </div>
-
-            <h1 className="hero-animate font-sans font-extrabold text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] text-foreground leading-[1.1] mb-6">
-              Dine fliser fortjener{" "}
-              <span className="text-primary">at se nye ud igen</span>
+            <h1 className="hero-animate font-sans font-extrabold text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] text-foreground leading-[1.1] mb-5">
+              Få algefri fliser, tag og terrasse{" "}
+              <span className="text-primary">på under 14 dage</span>
             </h1>
 
-            <p className="hero-animate hero-animate-delay-1 text-base md:text-lg text-muted-foreground max-w-2xl mb-4 leading-relaxed">
-              Professionel fliserens, algerens og tagrens i Herning, Ikast og hele Midtjylland — fra 30 kr./m²
+            <p className="hero-animate hero-animate-delay-1 text-base md:text-lg text-muted-foreground max-w-2xl mb-6 leading-relaxed">
+              Professionel udendørs rengøring i Herning, Ikast og hele Midtjylland. Skånsomt lavtryk med varmt vand og miljøgodkendte produkter — fra 30 kr./m².
             </p>
 
-            {/* Trust-bar — single location, directly under subheadline */}
-            <div className="hero-animate hero-animate-delay-2 flex flex-wrap gap-x-4 gap-y-1.5 text-sm text-muted-foreground mb-6">
-              <span className="flex items-center gap-1"><Users className="h-3.5 w-3.5 text-primary" /> 500+ tilfredse kunder</span>
-              <span className="flex items-center gap-1"><Shield className="h-3.5 w-3.5 text-primary" /> Op til 10 års garanti</span>
-              <span className="flex items-center gap-1"><Clock className="h-3.5 w-3.5 text-primary" /> Svar inden 24 timer</span>
-              <span className="flex items-center gap-1"><Leaf className="h-3.5 w-3.5 text-primary" /> Miljøgodkendte produkter</span>
-            </div>
-
-            <div className="hero-animate hero-animate-delay-3 flex flex-col sm:flex-row gap-3 mb-4">
+            {/* Primary CTA + microcopy */}
+            <div className="hero-animate hero-animate-delay-2 flex flex-col sm:flex-row gap-3 mb-3">
               <Button
                 size="lg"
-                className="font-sans font-bold text-base gap-2 shadow-md hover:shadow-lg transition-shadow"
+                className="font-sans font-bold text-base gap-2 shadow-md hover:shadow-lg transition-shadow h-12 px-8"
                 onClick={scrollToCalculator}
                 data-testid="hero-cta-beregn"
               >
-                Beregn din pris
+                Beregn pris på 30 sekunder
                 <ArrowRight className="h-4 w-4" />
               </Button>
               <a href="tel:+4525131797">
                 <Button
                   size="lg"
                   variant="outline"
-                  className="font-sans font-bold text-base gap-2 w-full sm:w-auto"
+                  className="font-sans font-bold text-base gap-2 w-full sm:w-auto h-12"
                   data-testid="hero-cta-ring"
                 >
                   <Phone className="h-4 w-4" />
@@ -114,7 +102,37 @@ function HeroSection() {
                 </Button>
               </a>
             </div>
-            <p className="text-xs text-muted-foreground">Gratis og uforpligtende tilbud · Svar inden 24 timer</p>
+            <p className="hero-animate hero-animate-delay-2 text-xs text-muted-foreground mb-6">
+              Ingen binding. Du får pris og kan bestille med det samme.
+            </p>
+
+            {/* Social proof directly under hero CTA */}
+            <div className="hero-animate hero-animate-delay-3">
+              <a
+                href="https://www.google.com/maps/place/Kalles+Algerens+ApS/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-3 bg-card border border-border px-4 py-2.5 rounded-xl hover:shadow-md transition-shadow"
+              >
+                <svg viewBox="0 0 24 24" className="h-5 w-5 shrink-0" aria-hidden="true">
+                  <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
+                  <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                  <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                  <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                </svg>
+                <div className="flex items-center gap-1.5">
+                  <div className="flex items-center gap-0.5">
+                    {[...Array(5)].map((_, j) => (
+                      <Star key={j} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                    ))}
+                  </div>
+                  <span className="font-bold text-foreground text-sm">5,0</span>
+                  <span className="text-xs text-muted-foreground">på Google</span>
+                </div>
+                <span className="text-xs text-muted-foreground hidden sm:inline">·</span>
+                <span className="text-xs font-medium text-foreground hidden sm:inline">500+ tilfredse kunder</span>
+              </a>
+            </div>
           </div>
 
           {/* Hero image */}
@@ -168,6 +186,10 @@ function TrustBar() {
 
 // ─── Services ──────────────────────────────────────
 function ServicesSection() {
+  const scrollToCalculator = () => {
+    document.getElementById("prisberegner")?.scrollIntoView({ behavior: "smooth" });
+  };
+
   const serviceCards = [
     {
       icon: Droplets,
@@ -208,14 +230,6 @@ function ServicesSection() {
       desc: "Fast pris op til 200 m². Miljøgodkendt Neutralon algebehandling.",
       href: "/algebehandling-af-tag",
       image: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/services/algerens.webp",
-    },
-    {
-      icon: Users,
-      title: "Nabo-rabat",
-      price: "Spar op til 10%",
-      desc: "Bestil sammen med din nabo og spar begge penge på jeres renseopgave.",
-      href: "/nabo-rabat",
-      image: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/services/fliserens.webp",
     },
   ];
 
@@ -268,259 +282,322 @@ function ServicesSection() {
               </AnimateOnScroll>
             );
           })}
-        </div>
 
-        {/* Nabo-rabat banner */}
-        <AnimateOnScroll animation="fade-in" className="mt-8">
-          <div className="border-2 border-dashed border-primary/30 rounded-xl p-6 bg-primary/[0.03] flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div>
-              <h3 className="font-sans font-bold text-lg text-foreground">
-                🏘️ Nabo-rabat — Spar op til 10%
-              </h3>
-              <p className="text-sm text-muted-foreground mt-1">
-                Bestil sammen med din nabo og spar begge penge. Jo flere naboer, jo større rabat.
-              </p>
+          {/* Nabo-rabat card — action-oriented, links to calculator */}
+          <AnimateOnScroll animation="fade-up" delay={500}>
+            <div
+              className="group bg-card rounded-xl border-2 border-dashed border-primary/30 overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-md cursor-pointer h-full flex flex-col"
+              onClick={scrollToCalculator}
+              data-testid="service-card-nabo"
+            >
+              <div className="aspect-[16/10] overflow-hidden bg-primary/5 flex items-center justify-center">
+                <div className="text-center px-4">
+                  <span className="text-5xl mb-2 block">🏘️</span>
+                  <p className="font-sans font-extrabold text-2xl text-primary">Spar op til 10%</p>
+                </div>
+              </div>
+              <div className="p-5 flex-1 flex flex-col">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-8 h-8 rounded-md bg-primary/10 flex items-center justify-center shrink-0">
+                    <Users className="h-4 w-4 text-primary" />
+                  </div>
+                  <h3 className="font-sans font-bold text-lg text-foreground">Nabo-rabat</h3>
+                </div>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-3 flex-1">
+                  Bestil sammen med din nabo og spar begge penge. Aktivér naborabat direkte i prisberegneren.
+                </p>
+                <span className="text-sm font-medium text-primary inline-flex items-center gap-1 group-hover:gap-2 transition-all">
+                  Beregn pris med naborabat <ArrowRight className="h-3.5 w-3.5" />
+                </span>
+              </div>
             </div>
-            <Link href="/nabo-rabat">
-              <Button className="shrink-0 font-semibold gap-2" data-testid="nabo-rabat-cta">
-                Se nabo-rabat <ArrowRight className="h-4 w-4" />
+          </AnimateOnScroll>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── Detailed Service Descriptions (SEO) ──────────────────────────────────────
+function ServiceDetailSections() {
+  const scrollToCalculator = () => {
+    document.getElementById("prisberegner")?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  return (
+    <section className="py-16 md:py-24 bg-muted/20" data-testid="service-details-section">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 className="font-sans font-extrabold text-2xl md:text-3xl text-foreground mb-10 text-center">
+          Professionel udendørs rengøring i Midtjylland
+        </h2>
+
+        {/* Fliserens */}
+        <div className="mb-12" id="fliserens-info">
+          <h3 className="font-sans font-bold text-xl text-foreground mb-3 flex items-center gap-2">
+            <Droplets className="h-5 w-5 text-primary" />
+            Fliserens — fra 30 kr./m²
+          </h3>
+          <div className="text-muted-foreground leading-relaxed space-y-3 text-sm">
+            <p>
+              Fliserens er vores mest efterspurgte ydelse. Vi renser alle typer belægningssten, betonfliser, klinker og natursten med varmt vand under lavtryk. I modsætning til traditionel højtryksrensning undgår vi at beskadige fuger og overflade. Varmt vand fjerner alger, mos og organisk snavs mere effektivt end koldt vand — og resultatet holder længere.
+            </p>
+            <p>
+              Prisen starter fra 30 kr./m² (minimum 75 m² / 2.250 kr. inkl. moms). Efter rensningen tilbyder vi {" "}
+              <Link href="/algebehandling-af-tag" className="text-primary hover:underline font-medium">algebehandling med Neutralon</Link>{" "}
+              og <Link href="/fliserens" className="text-primary hover:underline font-medium">nano-imprægnering</Link>{" "}
+              som tilvalg. Vi dækker hele Midtjylland — herunder{" "}
+              <Link href="/fliserens-i-herning" className="text-primary hover:underline font-medium">Herning</Link>,{" "}
+              <Link href="/fliserens-i-ikast" className="text-primary hover:underline font-medium">Ikast</Link>,{" "}
+              <Link href="/fliserens-i-brande" className="text-primary hover:underline font-medium">Brande</Link> og{" "}
+              <Link href="/fliserens-i-give" className="text-primary hover:underline font-medium">Give</Link>.
+            </p>
+            <p>
+              Fliserens er godkendt under servicefradraget. Det betyder, at du kan trække arbejdslønnen fra i skat — op til 18.300 kr. pr. person i 2026.{" "}
+              <Link href="/servicefradrag" className="text-primary hover:underline font-medium">Læs mere om servicefradrag på fliserens</Link>.
+            </p>
+          </div>
+          <div className="mt-4 flex flex-wrap gap-3">
+            <Link href="/fliserens">
+              <Button variant="outline" size="sm" className="gap-1.5 font-medium">
+                Læs mere om fliserens <ArrowRight className="h-3.5 w-3.5" />
               </Button>
             </Link>
+            <Button variant="ghost" size="sm" className="gap-1.5 font-medium text-primary" onClick={scrollToCalculator}>
+              Beregn pris <ArrowRight className="h-3.5 w-3.5" />
+            </Button>
           </div>
-        </AnimateOnScroll>
-      </div>
-    </section>
-  );
-}
+        </div>
 
-// ─── SEO Intro ──────────────────────────────────────
-function SEOIntroSection() {
-  return (
-    <section className="py-16 md:py-20">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="font-sans font-bold text-2xl md:text-3xl text-foreground mb-6">
-          Skånsom og professionel algerens af fliser, tage og terrasser
-        </h2>
-        <div className="space-y-4 text-muted-foreground leading-relaxed">
-          <p>Velkommen til Kalles Algerens. Her hjælper jeg dig med at få dine udendørs overflader til at se ud som nye igen. Helt konkret fjerner jeg alger, flisepest, mos og snavs fra fliser, terrasser, tage og facader. Derudover sørger jeg altid for at arbejde skånsomt og effektivt, så du får et holdbart resultat.</p>
-          <p>Selv om jeg er lokal i Midtjylland, tilbyder jeg også professionel algerens i hele Danmark. Det betyder, at både private og erhverv kan få renset udendørs overflader hos mig.</p>
-          <p>
-            Når jeg arbejder lokalt, tilbyder jeg for eksempel professionel{' '}
-            <Link href="/fliserens-i-herning" className="text-primary hover:underline font-medium">fliserens i Herning</Link>,{' '}
-            <Link href="/fliserens-i-ikast" className="text-primary hover:underline font-medium">fliserens i Ikast</Link>,{' '}
-            <Link href="/fliserens-i-brande" className="text-primary hover:underline font-medium">fliserens i Brande</Link>,{' '}
-            <Link href="/fliserens-i-give" className="text-primary hover:underline font-medium">fliserens i Give</Link> og omegn.
-          </p>
-          <p>Derfor bruger jeg kun miljøvenlige løsninger og professionelt udstyr. På den måde sikrer jeg et flot resultat, der holder i lang tid. Samtidig følger jeg altid de retningslinjer, som Miljøstyrelsen anbefaler for brug af rensemidler udendørs.</p>
+        {/* Tagrens */}
+        <div className="mb-12" id="tagrens-info">
+          <h3 className="font-sans font-bold text-xl text-foreground mb-3 flex items-center gap-2">
+            <HomeIcon className="h-5 w-5 text-primary" />
+            Tagrens & Tagmaling — fra 10.997 kr.
+          </h3>
+          <div className="text-muted-foreground leading-relaxed space-y-3 text-sm">
+            <p>
+              Et tag fuldt af alger og mos er ikke bare grimt — det kan forkorte tagets levetid markant. Vi tilbyder professionel tagrens af betontagsten, teglsten og eternit (ikke asbest). Rensningen fjerner alger, mos, lav og snavs og efterlades med en algebehandling, der forebygger genvækst.
+            </p>
+            <p>
+              Ønsker du et helt nyt udseende, tilbyder vi også{" "}
+              <Link href="/tagmaling" className="text-primary hover:underline font-medium">tagmaling</Link>{" "}
+              i en bred vifte af farver. Malingen beskytter og forskønner taget i mange år. Med en{" "}
+              <Link href="/serviceaftaler" className="text-primary hover:underline font-medium">serviceaftale</Link>{" "}
+              tilbyder vi op til 10 års garanti med årlig algebehandling.
+            </p>
+            <p>
+              Tagrens tager typisk 1-2 dage afhængigt af tagets størrelse. Prisen starter fra 10.997 kr. inkl. algebehandling, og vi sender altid et præcist tilbud efter besigtigelse.
+            </p>
+          </div>
+          <div className="mt-4 flex flex-wrap gap-3">
+            <Link href="/tagrens">
+              <Button variant="outline" size="sm" className="gap-1.5 font-medium">
+                Læs mere om tagrens <ArrowRight className="h-3.5 w-3.5" />
+              </Button>
+            </Link>
+            <Button variant="ghost" size="sm" className="gap-1.5 font-medium text-primary" onClick={scrollToCalculator}>
+              Få tilbud <ArrowRight className="h-3.5 w-3.5" />
+            </Button>
+          </div>
+        </div>
+
+        {/* Facaderens */}
+        <div className="mb-12" id="facaderens-info">
+          <h3 className="font-sans font-bold text-xl text-foreground mb-3 flex items-center gap-2">
+            <Building2 className="h-5 w-5 text-primary" />
+            Facaderens — fra 2.997 kr.
+          </h3>
+          <div className="text-muted-foreground leading-relaxed space-y-3 text-sm">
+            <p>
+              En snavset facade giver et nedslidt indtryk af dit hjem. Alger, grønne belægninger og smuds sætter sig gradvist og kan være svære at fjerne uden det rette udstyr. Vi tilbyder skånsom {" "}
+              <Link href="/facaderens" className="text-primary hover:underline font-medium">facaderens</Link>{" "}
+              tilpasset alle materialer — mursten, puds, beton og træ.
+            </p>
+            <p>
+              Vi bruger en kombination af lavtryksrens og professionelle rengøringsmidler, som er skånsomme mod overfladen men effektive mod alger og snavs. Prisen starter fra 2.997 kr. afhængigt af facade-størrelse og tilstand. Kontakt os for et uforpligtende tilbud.
+            </p>
+          </div>
+          <div className="mt-4 flex flex-wrap gap-3">
+            <Link href="/facaderens">
+              <Button variant="outline" size="sm" className="gap-1.5 font-medium">
+                Læs mere om facaderens <ArrowRight className="h-3.5 w-3.5" />
+              </Button>
+            </Link>
+            <Button variant="ghost" size="sm" className="gap-1.5 font-medium text-primary" onClick={scrollToCalculator}>
+              Få tilbud <ArrowRight className="h-3.5 w-3.5" />
+            </Button>
+          </div>
+        </div>
+
+        {/* Træterrasse */}
+        <div className="mb-12" id="terrasse-info">
+          <h3 className="font-sans font-bold text-xl text-foreground mb-3 flex items-center gap-2">
+            <TreePine className="h-5 w-5 text-primary" />
+            Træterrasse Rens — fra 40 kr./m²
+          </h3>
+          <div className="text-muted-foreground leading-relaxed space-y-3 text-sm">
+            <p>
+              Træterrasser kræver særlig behandling. Alger og mos gør træet glat og uindbydende, og forkert rengøring kan beskadige træets overflade. Hos Kalles Algerens bruger vi skånsomt lavtryk med varmt vand, som fjerner snavs uden at rive træfibrene op.
+            </p>
+            <p>
+              Efter rensningen tilbyder vi imprægnering, der beskytter træet mod fugt, UV-stråling og genvækst af alger. Vi renser alle typer{" "}
+              <Link href="/traeterrasse-rens" className="text-primary hover:underline font-medium">træterrasser</Link>{" "}
+              — trykimprægneret, hårdttræ og composit. Prisen starter fra 40 kr./m² med minimum 2.497 kr.
+            </p>
+          </div>
+          <div className="mt-4 flex flex-wrap gap-3">
+            <Link href="/traeterrasse-rens">
+              <Button variant="outline" size="sm" className="gap-1.5 font-medium">
+                Læs mere om terrasse rens <ArrowRight className="h-3.5 w-3.5" />
+              </Button>
+            </Link>
+            <Button variant="ghost" size="sm" className="gap-1.5 font-medium text-primary" onClick={scrollToCalculator}>
+              Beregn pris <ArrowRight className="h-3.5 w-3.5" />
+            </Button>
+          </div>
+        </div>
+
+        {/* Algebehandling */}
+        <div id="algebehandling-info">
+          <h3 className="font-sans font-bold text-xl text-foreground mb-3 flex items-center gap-2">
+            <Sparkles className="h-5 w-5 text-primary" />
+            Algebehandling — 995 kr. (op til 200 m²)
+          </h3>
+          <div className="text-muted-foreground leading-relaxed space-y-3 text-sm">
+            <p>
+              Algebehandling er den mest effektive måde at forebygge alge- og mosvækst på tag, fliser og facader. Vi bruger Neutralon, som er miljøgodkendt af Miljøstyrelsen. Produktet virker i op til 5 år og nedbryder gradvist alger, mos og lav uden at skade overfladen.
+            </p>
+            <p>
+              Behandlingen kan bruges selvstændigt eller som tilvalg efter en rensning. Prisen er fast: 995 kr. for op til 200 m². For større arealer beregnes en tillægspris pr. m².{" "}
+              <Link href="/algebehandling-af-tag" className="text-primary hover:underline font-medium">Læs mere om algebehandling</Link>.
+            </p>
+          </div>
+          <div className="mt-4 flex flex-wrap gap-3">
+            <Link href="/algebehandling-af-tag">
+              <Button variant="outline" size="sm" className="gap-1.5 font-medium">
+                Læs mere om algebehandling <ArrowRight className="h-3.5 w-3.5" />
+              </Button>
+            </Link>
+            <Button variant="ghost" size="sm" className="gap-1.5 font-medium text-primary" onClick={scrollToCalculator}>
+              Beregn pris <ArrowRight className="h-3.5 w-3.5" />
+            </Button>
+          </div>
         </div>
       </div>
     </section>
   );
 }
 
-// ─── Service Descriptions ──────────────────────────────────────
-function ServiceDescriptionsSection() {
-  return (
-    <section className="py-12 md:py-16 bg-muted/20">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="font-sans font-bold text-xl text-foreground mb-6">Kalle er ekspert i algerens</h2>
-        <div className="space-y-6">
-          <div>
-            <h3 className="font-sans font-semibold text-base text-foreground mb-1">
-              <Link href="/algebehandling-af-tag" className="text-primary hover:underline">Algebehandling</Link>
-            </h3>
-            <p className="text-sm text-muted-foreground leading-relaxed">En algebehandling af taget er nemlig en hurtig og effektiv måde at forlænge tagets levetid på. Desuden forebygger det også fremtidig algevækst.</p>
-          </div>
-          <div>
-            <h3 className="font-sans font-semibold text-base text-foreground mb-1">
-              <Link href="/fliserens" className="text-primary hover:underline">Fliserens</Link>
-            </h3>
-            <p className="text-sm text-muted-foreground leading-relaxed">Jeg renser dine fliser med hedt vand, som giver en dybere og mere effektiv rengøring. Det betyder, at resultatet holder længere end traditionel koldvandsrens.</p>
-          </div>
-          <div>
-            <h3 className="font-sans font-semibold text-base text-foreground mb-1">
-              <Link href="/tagrens" className="text-primary hover:underline">Tagrens & Tagmaling</Link>
-            </h3>
-            <p className="text-sm text-muted-foreground leading-relaxed">Først udfører jeg en mekanisk rensning af taget. Derefter kombinerer jeg det med professionel maling, der giver dit tag nyt liv og forlænger levetiden.</p>
-          </div>
-          <div>
-            <h3 className="font-sans font-semibold text-base text-foreground mb-1">
-              <Link href="/facaderens" className="text-primary hover:underline">Facaderens</Link>
-            </h3>
-            <p className="text-sm text-muted-foreground leading-relaxed">En facaderens giver dit hus et frisk og velholdt udtryk, fordi den effektivt fjerner alger, snavs og belægninger. Som resultat får du en renere facade og længere levetid.</p>
-          </div>
-          <div>
-            <h3 className="font-sans font-semibold text-base text-foreground mb-1">
-              <Link href="/traeterrasse-rens" className="text-primary hover:underline">Træterrasse Rens</Link>
-            </h3>
-            <p className="text-sm text-muted-foreground leading-relaxed">En professionel rens af træterrassen giver et flottere resultat. Derudover hjælper det også med at forlænge træets levetid.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-// ─── CTA Text Section ──────────────────────────────────────
-function CTATextSection() {
-  return (
-    <section className="py-12 md:py-16">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="font-sans font-bold text-xl text-foreground mb-4">Få et uforpligtende tilbud</h2>
-        <p className="text-muted-foreground leading-relaxed">
-          Hos Kalles Algerens er du altid velkommen til at kontakte mig med spørgsmål. Du kan også få et gratis og uforpligtende tilbud. Desuden rådgiver jeg gerne om den bedste løsning, uanset om det drejer sig om{' '}
-          <Link href="/fliserens" className="text-primary hover:underline font-medium">fliserens</Link>,{' '}
-          <Link href="/algebehandling-af-tag" className="text-primary hover:underline font-medium">algebehandling af tag</Link>,{' '}
-          <Link href="/traeterrasse-rens" className="text-primary hover:underline font-medium">træterrasserens</Link>,{' '}
-          <Link href="/facaderens" className="text-primary hover:underline font-medium">facaderens</Link> eller{' '}
-          <Link href="/tagrens" className="text-primary hover:underline font-medium">tagrens/maling</Link>.
-          Hvis du ønsker, at dine udendørs overflader igen skal fremstå rene, velholdte og indbydende, så er du velkommen til at tage kontakt allerede i dag. Det er helt uforpligtende.
-        </p>
-      </div>
-    </section>
-  );
-}
-
-// ─── Process ──────────────────────────────────────
-// Custom SVG icons for process steps
-function ProcessIconCalculator() {
-  return (
-    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="10" y="6" width="28" height="36" rx="4" stroke="hsl(var(--primary))" strokeWidth="2.5" />
-      <rect x="14" y="12" width="20" height="8" rx="2" fill="hsl(var(--primary))" opacity="0.15" />
-      <circle cx="18" cy="28" r="2" fill="hsl(var(--primary))" />
-      <circle cx="24" cy="28" r="2" fill="hsl(var(--primary))" />
-      <circle cx="30" cy="28" r="2" fill="hsl(var(--primary))" />
-      <circle cx="18" cy="34" r="2" fill="hsl(var(--primary))" />
-      <circle cx="24" cy="34" r="2" fill="hsl(var(--primary))" />
-      <rect x="27" y="32" width="6" height="4" rx="1" fill="hsl(var(--primary))" />
-    </svg>
-  );
-}
-function ProcessIconCalendar() {
-  return (
-    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="8" y="10" width="32" height="30" rx="4" stroke="hsl(var(--primary))" strokeWidth="2.5" />
-      <path d="M8 20H40" stroke="hsl(var(--primary))" strokeWidth="2.5" />
-      <path d="M16 6V14" stroke="hsl(var(--primary))" strokeWidth="2.5" strokeLinecap="round" />
-      <path d="M32 6V14" stroke="hsl(var(--primary))" strokeWidth="2.5" strokeLinecap="round" />
-      <circle cx="24" cy="30" r="4" fill="hsl(var(--primary))" opacity="0.2" stroke="hsl(var(--primary))" strokeWidth="2" />
-      <path d="M22 30L23.5 31.5L26.5 28.5" stroke="hsl(var(--primary))" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-function ProcessIconClean() {
-  return (
-    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M18 42V22" stroke="hsl(var(--primary))" strokeWidth="2.5" strokeLinecap="round" />
-      <path d="M14 22C14 14 18 8 18 8C18 8 22 14 22 22" stroke="hsl(var(--primary))" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M10 22H26" stroke="hsl(var(--primary))" strokeWidth="2.5" strokeLinecap="round" />
-      <path d="M30 18L34 10" stroke="hsl(var(--primary))" strokeWidth="2" strokeLinecap="round" opacity="0.5" />
-      <path d="M34 20L40 16" stroke="hsl(var(--primary))" strokeWidth="2" strokeLinecap="round" opacity="0.5" />
-      <path d="M32 26L38 24" stroke="hsl(var(--primary))" strokeWidth="2" strokeLinecap="round" opacity="0.5" />
-      <circle cx="34" cy="10" r="2" fill="hsl(var(--primary))" opacity="0.3" />
-      <circle cx="40" cy="16" r="1.5" fill="hsl(var(--primary))" opacity="0.3" />
-    </svg>
-  );
-}
-function ProcessIconResult() {
-  return (
-    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="24" cy="24" r="16" stroke="hsl(var(--primary))" strokeWidth="2.5" fill="hsl(var(--primary))" fillOpacity="0.08" />
-      <path d="M16 24L21 29L32 18" stroke="hsl(var(--primary))" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-      <circle cx="38" cy="10" r="2" fill="hsl(var(--primary))" opacity="0.4" />
-      <circle cx="40" cy="18" r="1.5" fill="hsl(var(--primary))" opacity="0.3" />
-      <circle cx="10" cy="12" r="1.5" fill="hsl(var(--primary))" opacity="0.3" />
-    </svg>
-  );
-}
-
+// ─── Process Section (3-step timeline) ──────────────────────────────────────
 function ProcessSection() {
   const scrollToCalculator = () => {
     document.getElementById("prisberegner")?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const steps = [
-    {
-      num: "1",
-      title: "Beregn pris",
-      desc: "Brug vores prisberegner og få et vejledende tilbud med det samme.",
-      icon: <ProcessIconCalculator />,
-      anchor: true,
-    },
-    { num: "2", title: "Vi aftaler tidspunkt", desc: "Vi ringer dig op inden 24 timer og finder en dato der passer.", icon: <ProcessIconCalendar />, anchor: false },
-    { num: "3", title: "Vi renser og behandler", desc: "Vi møder op til tiden med professionelt udstyr og miljøgodkendte produkter.", icon: <ProcessIconClean />, anchor: false },
-    { num: "4", title: "Se resultatet", desc: "Du nyder flotte, rene udendørs flader — med op til 10 års garanti.", icon: <ProcessIconResult />, anchor: false },
-  ];
-
   return (
-    <section className="py-16 md:py-24 bg-muted/30" data-testid="process-section">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-16 md:py-24" data-testid="process-section">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="font-sans font-extrabold text-2xl md:text-3xl text-foreground mb-3">
             Sådan foregår det
           </h2>
-          <p className="text-muted-foreground">Fra prisberegning til flot resultat — 4 nemme trin.</p>
+          <p className="text-muted-foreground max-w-xl mx-auto">
+            Fra prisberegning til rene fliser — 3 enkle trin.
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {steps.map((s, i) => (
-            <AnimateOnScroll key={i} animation="fade-up" delay={i * 150}>
-              <div className="text-center">
-                <div className="flex justify-center mb-4">{s.icon}</div>
-                <div className="w-10 h-10 rounded-full bg-primary text-primary-foreground font-bold text-lg flex items-center justify-center mx-auto mb-3">
-                  {s.num}
+        {/* 3-step timeline */}
+        <div className="relative">
+          {/* Connection line (desktop) */}
+          <div className="hidden md:block absolute top-16 left-[16.67%] right-[16.67%] h-0.5 bg-primary/20" />
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                num: "1",
+                title: "Beregn pris",
+                desc: "Brug vores prisberegner og få et vejledende tilbud med det samme. Det tager under 30 sekunder.",
+                cta: true,
+              },
+              {
+                num: "2",
+                title: "Vi ringer og bekræfter",
+                desc: "Du hører fra Kasper inden 24 timer. Vi aftaler en dato og giver dig et endeligt tilbud.",
+                cta: false,
+              },
+              {
+                num: "3",
+                title: "Vi kommer og renser",
+                desc: "Vi møder op med professionelt udstyr og miljøgodkendte produkter. Du nyder resultatet — med op til 10 års garanti.",
+                cta: false,
+              },
+            ].map((step, i) => (
+              <AnimateOnScroll key={i} animation="fade-up" delay={i * 150}>
+                <div className="text-center relative">
+                  <div className="w-14 h-14 rounded-full bg-primary text-primary-foreground font-extrabold text-xl flex items-center justify-center mx-auto mb-4 relative z-10 shadow-md">
+                    {step.num}
+                  </div>
+                  <h3 className="font-sans font-bold text-lg text-foreground mb-2">{step.title}</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed max-w-xs mx-auto">{step.desc}</p>
+                  {step.cta && (
+                    <button
+                      onClick={scrollToCalculator}
+                      className="mt-3 text-sm font-semibold text-primary hover:underline inline-flex items-center gap-1"
+                    >
+                      Start beregning <ArrowRight className="h-3.5 w-3.5" />
+                    </button>
+                  )}
                 </div>
-                <h3 className="font-sans font-bold text-base text-foreground mb-2">{s.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{s.desc}</p>
-                {s.anchor && (
-                  <button
-                    onClick={scrollToCalculator}
-                    className="mt-2 text-sm font-medium text-primary hover:underline inline-flex items-center gap-1"
-                  >
-                    → Prøv beregneren
-                  </button>
-                )}
-              </div>
-            </AnimateOnScroll>
-          ))}
+              </AnimateOnScroll>
+            ))}
+          </div>
         </div>
       </div>
     </section>
   );
 }
 
-// ─── Social Proof Banner ──────────────────────────────────────
-function SocialProofBanner() {
+// ─── Before/After Showcase ──────────────────────────────────
+function BeforeAfterShowcase() {
+  const sliders = [
+    {
+      before: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/fliserens-foer.webp",
+      after: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/fliserens-efter.webp",
+      label: "Fliserens — indkørsel",
+      factBadge: "Holder op til 10 år med algebehandling",
+    },
+    {
+      before: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/tagrens-foer.webp",
+      after: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/tagrens-efter.webp",
+      label: "Tagrens — betontag",
+      factBadge: "Op til 10 års garanti via serviceaftale",
+    },
+  ];
+
   return (
-    <section className="py-6 bg-yellow-50 border-y border-yellow-200/50" data-testid="social-proof-banner">
+    <section className="py-16 md:py-24 bg-muted/30" data-testid="before-after-showcase">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 text-center sm:text-left">
-          <a
-            href="https://www.google.com/maps/place/Kalles+Algerens+ApS/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm border border-yellow-200 hover:shadow-md transition-shadow"
-          >
-            <svg viewBox="0 0 24 24" className="h-5 w-5" aria-hidden="true">
-              <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
-              <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-              <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-              <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-            </svg>
-            <div className="flex items-center gap-1">
-              <span className="font-bold text-foreground text-sm">5,0</span>
-              <div className="flex items-center gap-0.5">
-                {[...Array(5)].map((_, j) => (
-                  <Star key={j} className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" />
-                ))}
-              </div>
-            </div>
-            <span className="text-xs text-muted-foreground">på Google</span>
-          </a>
-          <p className="text-sm font-medium text-foreground">
-            500+ tilfredse kunder i hele Midtjylland — fra Herning til Brande
-          </p>
+        <AnimateOnScroll animation="fade-up">
+          <div className="text-center mb-12">
+            <h2 className="font-sans font-extrabold text-2xl md:text-3xl text-foreground mb-3">
+              Se forskellen
+            </h2>
+            <p className="text-muted-foreground max-w-xl mx-auto">
+              Træk for at se resultatet af professionel rens med varmt vand og miljøgodkendte produkter.
+            </p>
+          </div>
+        </AnimateOnScroll>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {sliders.map((s, i) => (
+            <AnimateOnScroll key={i} animation="fade-up" delay={i * 100}>
+              <BeforeAfterSlider
+                before={s.before}
+                after={s.after}
+                label={s.label}
+                factBadge={s.factBadge}
+              />
+            </AnimateOnScroll>
+          ))}
         </div>
       </div>
     </section>
@@ -609,7 +686,7 @@ function TestimonialsSection() {
                   ))}
                 </div>
                 <p className="text-sm text-foreground leading-relaxed mb-4 italic">
-                  "{r.quote}"
+                  &quot;{r.quote}&quot;
                 </p>
                 <div className="flex items-center justify-between">
                   <div className="text-sm font-semibold text-foreground">
@@ -637,19 +714,107 @@ function TestimonialsSection() {
   );
 }
 
+// ─── Service Area ──────────────────────────────────────
+function ServiceAreaSection() {
+  const cities = [
+    { name: "Herning", href: "/fliserens-i-herning" },
+    { name: "Ikast", href: "/fliserens-i-ikast" },
+    { name: "Brande", href: "/fliserens-i-brande" },
+    { name: "Give", href: "/fliserens-i-give" },
+    { name: "Billund", href: "/fliserens-i-billund" },
+    { name: "Hammerum", href: "/fliserens-i-hammerum" },
+    { name: "Snejbjerg", href: "/fliserens-i-snejbjerg" },
+    { name: "Kibæk", href: "/fliserens-i-kibaek" },
+    { name: "Sunds", href: "/fliserens-i-sunds" },
+  ];
+
+  return (
+    <section className="py-12 md:py-16" data-testid="service-area-section">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-card border border-border rounded-2xl p-6 md:p-8">
+          <div className="flex items-start gap-3 mb-4">
+            <MapPin className="h-6 w-6 text-primary shrink-0 mt-0.5" />
+            <div>
+              <h2 className="font-sans font-bold text-xl text-foreground mb-1">
+                Vi dækker hele Midtjylland
+              </h2>
+              <p className="text-sm text-muted-foreground">
+                Kasper er baseret i Brande og kører ud til alle byer i regionen. Vi tager også opgaver i resten af Danmark mod et lille kørselstillæg.
+              </p>
+            </div>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {cities.map((city) => (
+              <Link
+                key={city.name}
+                href={city.href}
+                className="inline-flex items-center gap-1 bg-primary/5 text-primary text-sm font-medium px-3 py-1.5 rounded-full hover:bg-primary/10 transition-colors"
+              >
+                <MapPin className="h-3 w-3" />
+                {city.name}
+              </Link>
+            ))}
+          </div>
+          <p className="text-xs text-muted-foreground mt-4">
+            Bor du uden for listen? <a href="tel:+4525131797" className="text-primary hover:underline font-medium">Ring 25 13 17 97</a> — vi finder en løsning.
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 // ─── FAQ ──────────────────────────────────────
 function FAQSection() {
   const faqs = [
-    { q: "Hvordan foregår en fliserens?", a: "Vi bruger professionelt udstyr med varmt vand under højt tryk (op til 250 bar) kombineret med miljøgodkendte rengøringsmidler. Vi starter med at fjerne løs snavs, derefter renser vi grundigt og afslutter med algebehandling for langvarig beskyttelse." },
-    { q: "Er jeres produkter miljøvenlige?", a: "Ja! Vi bruger udelukkende miljøgodkendte produkter — herunder Neutralon, som er godkendt af Miljøstyrelsen. Vores metode er skånsom mod både naturen og dine overflader." },
-    { q: "Hvor lang tid tager en rensning?", a: "Det afhænger af areal og tilstand. En typisk fliserens på 80-100 m² tager ca. 3-5 timer. Vi giver dig et tidsestimat sammen med dit tilbud." },
-    { q: "Hvad koster det?", a: "Fliserens starter fra 30 kr./m², tagrens fra 10.997 kr., facaderens fra 2.997 kr. og algebehandling fra 995 kr. Brug vores prisberegner for et vejledende tilbud, eller ring for en uforpligtende snak." },
-    { q: "Dækker I mit område?", a: "Vi dækker hele Midtjylland — herunder Herning, Ikast, Brande, Silkeborg, Viborg, Holstebro og omegn. Vi kører også gerne til resten af Danmark mod et lille kørselstillæg." },
-    { q: "Hvad er nabo-rabat?", a: "Når du og din nabo bestiller sammen, sparer I begge penge. Vi sparer køretid og giver rabatten videre til jer. Jo flere naboer, jo større besparelse." },
-    { q: "Hvor lang garanti giver I?", a: "Vi tilbyder op til 10 års garanti via vores serviceaftale med årlig algebehandling. Det sikrer, at dine flader forbliver rene og pæne år efter år." },
-    { q: "Kan I rense asbesttag?", a: "Nej, vi renser IKKE asbesttag af sikkerhedsmæssige årsager. Vi anbefaler at kontakte en certificeret asbest-specialist for den type opgaver." },
-    { q: "Hvornår kan I komme?", a: "Vi bestræber os på at svare inden 24 timer og finde en dato der passer dig. I højsæsonen (forår/sommer) anbefaler vi at booke i god tid." },
-    { q: "Skal jeg være hjemme under rensningen?", a: "Det er ikke nødvendigt. Så længe vi har adgang til arealet og vandforsyning, klarer vi resten. Vi sender dig et billede af resultatet, når vi er færdige." },
+    {
+      q: "Hvad koster fliserens?",
+      a: "Fliserens starter fra 30 kr./m² med et minimum på 2.250 kr. (75 m²). Prisen inkluderer rens med varmt vand og højt tryk. Tilvalg som nano-imprægnering (fra 750 kr.) og fugesand (fra 750 kr.) lægges oveni. Brug vores prisberegner for et præcist tilbud på under 30 sekunder.",
+    },
+    {
+      q: "Hvordan foregår en fliserens?",
+      a: "Vi bruger professionelt udstyr med varmt vand (op til 90°C) under lavtryk kombineret med miljøgodkendte rengøringsmidler. Først fjerner vi løst snavs, derefter renser vi grundigt med roterende dyser, og til sidst skylles overfladen ren. Hele processen er skånsom mod fuger og belægning.",
+    },
+    {
+      q: "Er jeres produkter miljøvenlige?",
+      a: "Ja. Vi bruger udelukkende miljøgodkendte produkter — herunder Neutralon til algebehandling, som er godkendt af Miljøstyrelsen. Vores metode med varmt vand og lavtryk er desuden mere skånsom end traditionel højtryksrensning.",
+    },
+    {
+      q: "Hvor lang tid tager en rensning?",
+      a: "En typisk fliserens på 80-100 m² tager ca. 3-5 timer. Tagrens tager typisk 1-2 dage afhængigt af tagets størrelse og tilstand. Vi giver dig altid et tidsestimat sammen med dit tilbud.",
+    },
+    {
+      q: "Hvor lang tid holder resultatet?",
+      a: "En professionel fliserens holder typisk 3-5 år. Med tilkøb af algebehandling (Neutralon) og nano-imprægnering kan resultatet holde i op til 10 år. En serviceaftale med årlig algebehandling forlænger holdbarheden yderligere.",
+    },
+    {
+      q: "Hvilken kemi bruger I?",
+      a: "Vi bruger Neutralon til algebehandling — et miljøgodkendt produkt der forebygger genvækst af alger og mos i op til 5 år. Til rensning bruger vi primært varmt vand og mekanisk rengøring, suppleret med biologisk nedbrydelige rengøringsmidler ved behov.",
+    },
+    {
+      q: "Kan I rense mit tag?",
+      a: "Ja! Vi renser betontagsten, teglsten og eternit (ikke asbest). Tagrens inkluderer altid algebehandling med Neutralon. Vi tilbyder også tagmaling, der giver taget nyt udseende og forlænger levetiden. Priser starter fra 10.997 kr.",
+    },
+    {
+      q: "Dækker I mit område?",
+      a: "Vi dækker hele Midtjylland — herunder Herning, Ikast, Brande, Give, Billund, Silkeborg, Viborg, Holstebro og omegn. Vi kører også gerne længere mod et lille kørselstillæg. Ring 25 13 17 97 for at høre om vi dækker din adresse.",
+    },
+    {
+      q: "Hvad er nabo-rabatten?",
+      a: "Når du og din nabo bestiller sammen, sparer I begge penge — op til 10%. Vi sparer køretid og giver besparelsen videre til jer. Jo flere naboer der deltager, jo større rabat. Aktivér naborabatten direkte i vores prisberegner.",
+    },
+    {
+      q: "Kan jeg få servicefradrag på fliserens?",
+      a: "Ja! Fliserens er godkendt under servicefradraget (BoligJobordningen). I 2026 kan du trække op til 18.300 kr. pr. person fra i skat. Vi sender altid en faktura med specificeret arbejdsløn og CVR-nummer — klar til indberetning. Læs mere på vores servicefradrag-side.",
+    },
+    {
+      q: "Hvor lang garanti giver I?",
+      a: "Vi tilbyder op til 10 års garanti via vores serviceaftale med årlig algebehandling. Uden serviceaftale giver vi 1 års garanti på udført arbejde. Serviceaftalen sikrer, at dine flader forbliver rene år efter år.",
+    },
+    {
+      q: "Skal jeg være hjemme under rensningen?",
+      a: "Nej, det er ikke nødvendigt. Så længe vi har adgang til arealet og vandforsyning, klarer vi resten. Vi sender dig et billede af resultatet, når vi er færdige, og du kan betale digitalt bagefter.",
+    },
   ];
 
   return (
@@ -660,6 +825,9 @@ function FAQSection() {
           <h2 className="font-sans font-extrabold text-2xl md:text-3xl text-foreground mb-3">
             Ofte stillede spørgsmål
           </h2>
+          <p className="text-muted-foreground">
+            Alt du skal vide om fliserens, tagrens og udendørs rengøring
+          </p>
         </div>
 
         <Accordion type="single" collapsible className="space-y-2">
@@ -699,13 +867,13 @@ function BottomCTA() {
           Klar til flotte udendørs flader?
         </h2>
         <p className="text-primary-foreground/80 max-w-xl mx-auto mb-8">
-          Få et uforpligtende tilbud i dag. Vi svarer inden 24 timer.
+          Beregn din pris på under 30 sekunder — helt uforpligtende.
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Button
             size="lg"
             variant="secondary"
-            className="font-sans font-bold text-base"
+            className="font-sans font-bold text-base h-12"
             onClick={scrollToCalculator}
             data-testid="bottom-cta-beregn"
           >
@@ -715,7 +883,7 @@ function BottomCTA() {
             <Button
               size="lg"
               variant="outline"
-              className="font-sans font-bold text-base border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 w-full sm:w-auto gap-2"
+              className="font-sans font-bold text-base border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 w-full sm:w-auto gap-2 h-12"
               data-testid="bottom-cta-ring"
             >
               <Phone className="h-4 w-4" />
@@ -730,70 +898,31 @@ function BottomCTA() {
   );
 }
 
-// ─── Before/After Showcase ──────────────────────────────────
-function BeforeAfterShowcase() {
-  const sliders = [
-    {
-      before: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/fliserens-foer.webp",
-      after: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/fliserens-efter.webp",
-      label: "Fliserens — indkørsel",
-      factBadge: "Holder op til 10 år med algebehandling",
-    },
-    {
-      before: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/tagrens-foer.webp",
-      after: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/tagrens-efter.webp",
-      label: "Tagrens — betontag",
-      factBadge: "Op til 10 års garanti via serviceaftale",
-    },
-  ];
-
-  return (
-    <section className="py-16 md:py-24 bg-muted/30" data-testid="before-after-showcase">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <AnimateOnScroll animation="fade-up">
-          <div className="text-center mb-12">
-            <h2 className="font-sans font-extrabold text-2xl md:text-3xl text-foreground mb-3">
-              Se forskellen
-            </h2>
-            <p className="text-muted-foreground max-w-xl mx-auto">
-              Træk for at se resultatet af professionel rens med varmt vand og miljøgodkendte produkter.
-            </p>
-          </div>
-        </AnimateOnScroll>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {sliders.map((s, i) => (
-            <AnimateOnScroll key={i} animation="fade-up" delay={i * 100}>
-              <BeforeAfterSlider
-                before={s.before}
-                after={s.after}
-                label={s.label}
-                factBadge={s.factBadge}
-              />
-            </AnimateOnScroll>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 // ─── Home Page Content ──────────────────────────────────
 export default function HomePageContent() {
+  const faqSchemaItems = [
+    { q: "Hvad koster fliserens?", a: "Fliserens starter fra 30 kr./m² med et minimum på 2.250 kr. (75 m²). Prisen inkluderer rens med varmt vand og højt tryk. Tilvalg som nano-imprægnering (fra 750 kr.) og fugesand (fra 750 kr.) lægges oveni." },
+    { q: "Hvordan foregår en fliserens?", a: "Vi bruger professionelt udstyr med varmt vand (op til 90°C) under lavtryk kombineret med miljøgodkendte rengøringsmidler. Først fjerner vi løst snavs, derefter renser vi grundigt med roterende dyser, og til sidst skylles overfladen ren." },
+    { q: "Er jeres produkter miljøvenlige?", a: "Ja. Vi bruger udelukkende miljøgodkendte produkter — herunder Neutralon til algebehandling, som er godkendt af Miljøstyrelsen." },
+    { q: "Hvor lang tid tager en rensning?", a: "En typisk fliserens på 80-100 m² tager ca. 3-5 timer. Tagrens tager typisk 1-2 dage." },
+    { q: "Hvor lang tid holder resultatet?", a: "En professionel fliserens holder typisk 3-5 år. Med algebehandling og nano-imprægnering kan resultatet holde i op til 10 år." },
+    { q: "Hvilken kemi bruger I?", a: "Vi bruger Neutralon til algebehandling — et miljøgodkendt produkt der forebygger genvækst af alger og mos i op til 5 år." },
+    { q: "Kan I rense mit tag?", a: "Ja! Vi renser betontagsten, teglsten og eternit (ikke asbest). Tagrens inkluderer altid algebehandling. Priser starter fra 10.997 kr." },
+    { q: "Dækker I mit område?", a: "Vi dækker hele Midtjylland — herunder Herning, Ikast, Brande, Give, Billund, Silkeborg, Viborg, Holstebro og omegn." },
+    { q: "Hvad er nabo-rabatten?", a: "Når du og din nabo bestiller sammen, sparer I begge penge — op til 10%. Vi sparer køretid og giver besparelsen videre til jer." },
+    { q: "Kan jeg få servicefradrag på fliserens?", a: "Ja! Fliserens er godkendt under servicefradraget. I 2026 kan du trække op til 18.300 kr. pr. person fra i skat." },
+    { q: "Hvor lang garanti giver I?", a: "Vi tilbyder op til 10 års garanti via vores serviceaftale med årlig algebehandling." },
+    { q: "Skal jeg være hjemme under rensningen?", a: "Nej. Så længe vi har adgang til arealet og vandforsyning, klarer vi resten. Vi sender et billede af resultatet når vi er færdige." },
+  ];
+
   const faqSchema = useMemo(() => ({
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    "mainEntity": [
-      { "@type": "Question", "name": "Hvordan foregår en fliserens?", "acceptedAnswer": { "@type": "Answer", "text": "Vi bruger professionelt udstyr med varmt vand under højt tryk (op til 250 bar) kombineret med miljøgodkendte rengøringsmidler. Vi starter med at fjerne løs snavs, derefter renser vi grundigt og afslutter med algebehandling for langvarig beskyttelse." } },
-      { "@type": "Question", "name": "Er jeres produkter miljøvenlige?", "acceptedAnswer": { "@type": "Answer", "text": "Ja! Vi bruger udelukkende miljøgodkendte produkter — herunder Neutralon, som er godkendt af Miljøstyrelsen. Vores metode er skånsom mod både naturen og dine overflader." } },
-      { "@type": "Question", "name": "Hvor lang tid tager en rensning?", "acceptedAnswer": { "@type": "Answer", "text": "Det afhænger af areal og tilstand. En typisk fliserens på 80-100 m² tager ca. 3-5 timer. Vi giver dig et tidsestimat sammen med dit tilbud." } },
-      { "@type": "Question", "name": "Hvad koster det?", "acceptedAnswer": { "@type": "Answer", "text": "Fliserens starter fra 30 kr./m², tagrens fra 10.997 kr., facaderens fra 2.997 kr. og algebehandling fra 995 kr. Brug vores prisberegner for et vejledende tilbud, eller ring for en uforpligtende snak." } },
-      { "@type": "Question", "name": "Dækker I mit område?", "acceptedAnswer": { "@type": "Answer", "text": "Vi dækker hele Midtjylland — herunder Herning, Ikast, Brande, Silkeborg, Viborg, Holstebro og omegn. Vi kører også gerne til resten af Danmark mod et lille kørselstillæg." } },
-      { "@type": "Question", "name": "Hvad er nabo-rabat?", "acceptedAnswer": { "@type": "Answer", "text": "Når du og din nabo bestiller sammen, sparer I begge penge. Vi sparer køretid og giver rabatten videre til jer. Jo flere naboer, jo større besparelse." } },
-      { "@type": "Question", "name": "Hvor lang garanti giver I?", "acceptedAnswer": { "@type": "Answer", "text": "Vi tilbyder op til 10 års garanti via vores serviceaftale med årlig algebehandling. Det sikrer, at dine flader forbliver rene og pæne år efter år." } },
-      { "@type": "Question", "name": "Kan I rense asbesttag?", "acceptedAnswer": { "@type": "Answer", "text": "Nej, vi renser IKKE asbesttag af sikkerhedsmæssige årsager. Vi anbefaler at kontakte en certificeret asbest-specialist for den type opgaver." } },
-      { "@type": "Question", "name": "Hvornår kan I komme?", "acceptedAnswer": { "@type": "Answer", "text": "Vi bestræber os på at svare inden 24 timer og finde en dato der passer dig. I højsæsonen (forår/sommer) anbefaler vi at booke i god tid." } },
-      { "@type": "Question", "name": "Skal jeg være hjemme under rensningen?", "acceptedAnswer": { "@type": "Answer", "text": "Det er ikke nødvendigt. Så længe vi har adgang til arealet og vandforsyning, klarer vi resten. Vi sender dig et billede af resultatet, når vi er færdige." } },
-    ],
+    "mainEntity": faqSchemaItems.map(faq => ({
+      "@type": "Question",
+      "name": faq.q,
+      "acceptedAnswer": { "@type": "Answer", "text": faq.a },
+    })),
   }), []);
 
   return (
@@ -803,16 +932,15 @@ export default function HomePageContent() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <HeroSection />
+      <TrustBar />
       <ServicesSection />
       <BeforeAfterShowcase />
-      <SEOIntroSection />
-      <ServiceDescriptionsSection />
-      <SocialProofBanner />
       <ProcessSection />
       <Calculator />
+      <ServiceDetailSections />
       <StatsSection />
       <TestimonialsSection />
-      <CTATextSection />
+      <ServiceAreaSection />
       <FAQSection />
       <BottomCTA />
     </div>
