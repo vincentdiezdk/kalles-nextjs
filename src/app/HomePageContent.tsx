@@ -270,38 +270,6 @@ function ServicesSection() {
           })}
         </div>
 
-        {/* Pakke-struktur for Fliserens & Tagrens */}
-        <AnimateOnScroll animation="fade-up" className="mt-12">
-          <div className="text-center mb-6">
-            <h3 className="font-sans font-bold text-xl text-foreground">Vælg din pakke</h3>
-            <p className="text-sm text-muted-foreground mt-1">Gælder fliserens og tagrens</p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto">
-            {/* Basis */}
-            <div className="bg-card border border-border rounded-xl p-5 text-center">
-              <h4 className="font-sans font-bold text-base text-foreground mb-1">Basis-rens</h4>
-              <p className="text-xs text-muted-foreground mb-3">Højtryksrens</p>
-              <div className="text-2xl font-sans font-extrabold text-foreground mb-1">fra 30 kr.</div>
-              <p className="text-xs text-muted-foreground">pr. m²</p>
-            </div>
-            {/* Komplet — Mest populær */}
-            <div className="bg-card border-2 border-primary rounded-xl p-5 text-center relative">
-              <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground text-xs font-bold px-3 py-0.5 rounded-full whitespace-nowrap">Mest populær</span>
-              <h4 className="font-sans font-bold text-base text-foreground mb-1 mt-1">Komplet-rens</h4>
-              <p className="text-xs text-muted-foreground mb-3">Rens + algebehandling</p>
-              <div className="text-2xl font-sans font-extrabold text-primary mb-1">fra 45 kr.</div>
-              <p className="text-xs text-muted-foreground">pr. m²</p>
-            </div>
-            {/* Premium */}
-            <div className="bg-card border border-border rounded-xl p-5 text-center">
-              <h4 className="font-sans font-bold text-base text-foreground mb-1">Premium-rens</h4>
-              <p className="text-xs text-muted-foreground mb-3">Rens + alge + imprægnering</p>
-              <div className="text-2xl font-sans font-extrabold text-foreground mb-1">fra 60 kr.</div>
-              <p className="text-xs text-muted-foreground">pr. m²</p>
-            </div>
-          </div>
-        </AnimateOnScroll>
-
         {/* Nabo-rabat banner */}
         <AnimateOnScroll animation="fade-in" className="mt-8">
           <div className="border-2 border-dashed border-primary/30 rounded-xl p-6 bg-primary/[0.03] flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -776,18 +744,6 @@ function BeforeAfterShowcase() {
       after: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/tagrens-efter.webp",
       label: "Tagrens — betontag",
       factBadge: "Op til 10 års garanti via serviceaftale",
-    },
-    {
-      before: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/tagmaling-foer.webp",
-      after: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/tagmaling-efter.webp",
-      label: "Træterrasse — rensning",
-      factBadge: "Skånsom rens forlænger træets levetid",
-    },
-    {
-      before: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/tagmaling-foer.webp",
-      after: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/tagmaling-efter.webp",
-      label: "Facaderens — murværk",
-      factBadge: "Miljøgodkendte produkter fra Neutralon",
     },
   ];
 
