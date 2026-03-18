@@ -127,11 +127,11 @@ export function ServicePage({
             </div>
             {heroImage && (
               <div className="hidden lg:block">
-                <div className="rounded-2xl overflow-hidden shadow-lg">
+                <div className="rounded-2xl overflow-hidden shadow-lg aspect-[4/3]">
                   <img
                     src={heroImage}
                     alt={title}
-                    className="w-full h-auto object-cover"
+                    className="w-full h-full object-cover"
                     loading="eager"
                   />
                 </div>
@@ -159,7 +159,7 @@ export function ServicePage({
             <h2 className="font-sans font-bold text-xl text-foreground mb-8 text-center">
               {headingBeforeAfter || "Før & efter"}
             </h2>
-            <div className={`grid grid-cols-1 ${beforeAfter.length > 1 ? 'md:grid-cols-2' : 'max-w-xl mx-auto'} gap-8`}>
+            <div className={`grid grid-cols-1 ${beforeAfter.length > 1 ? 'md:grid-cols-2' : 'max-w-2xl mx-auto'} gap-8`}>
               {beforeAfter.map((ba, i) => (
                 <BeforeAfterSlider key={i} {...ba} />
               ))}
@@ -174,8 +174,8 @@ export function ServicePage({
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {extraImages.map((img, i) => (
-                <div key={i} className="rounded-xl overflow-hidden">
-                  <img src={img.src} alt={img.alt} className="w-full h-auto object-cover" loading="lazy" />
+                <div key={i} className="rounded-xl overflow-hidden aspect-[4/3]">
+                  <img src={img.src} alt={img.alt} className="w-full h-full object-cover" loading="lazy" />
                 </div>
               ))}
             </div>
@@ -424,11 +424,8 @@ export function FliserensPageContent() {
         headingFaq="Ofte stillede spørgsmål om fliserens"
         headingCta="Klar til professionel fliserens?"
         beforeAfter={[
-          { before: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/fliserens-foer.webp", after: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/fliserens-efter.webp", label: "Fliserens — indkørsel" },
-        ]}
-        extraImages={[
-          { src: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/fliserens-service-1.webp", alt: "Fliserens eksempel 1" },
-          { src: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/fliserens-service-2.webp", alt: "Fliserens eksempel 2" },
+          { before: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/fliserens-indkoersel-foer.webp", after: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/fliserens-indkoersel-efter.webp", label: "Fliserens — indkørsel" },
+          { before: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/fliserens-foer.webp", after: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/fliserens-efter.webp", label: "Fliserens — baghave" },
         ]}
         description={[
           "Dine udendørs fliser fortjener at se nye ud igen. Hos Kalles Algerens bruger vi professionelt udstyr med varmt vand under højt tryk for at fjerne alger, mos, snavs og belægninger — uden at skade dine fliser.",
@@ -668,6 +665,7 @@ export function FacaderensPageContent() {
         headingCta="Klar til at få din facade renset?"
         extraImages={[
           { src: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/facaderens-ba.webp", alt: "Facaderens før og efter" },
+          { src: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/facaderens-kaspermh.webp", alt: "Professionel facaderens" },
         ]}
         description={[
           "En ren facade giver dit hjem et markant løft og beskytter murværket mod nedbrydning. Alger, mos og snavs binder fugt, som over tid kan skade mursten, puds og fuger.",
@@ -770,11 +768,10 @@ export function TerrassePageContent() {
         headingProcess="Hvad koster rens af træterrasse?"
         headingFaq="Ofte stillede spørgsmål om terrasse-rens"
         headingCta="Klar til at få din terrasse renset?"
-        beforeAfter={[
-          { before: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/terrasse-foer.webp", after: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/terrasse-ba.webp", label: "Terrasse — før og efter" },
-        ]}
         extraImages={[
-          { src: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/terrasse-full.webp", alt: "Terrasse komplet rens" },
+          { src: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/terrasse-foer.webp", alt: "Terrasse rens — halvvejs resultat" },
+          { src: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/terrasse-kaspermh-1.webp", alt: "Træterrasse før rens" },
+          { src: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/terrasse-kaspermh-2.webp", alt: "Terrasse rens — halvvejs" },
         ]}
         description={[
           "Din træterrasse er udsat for vejr, vind, alger og snavs året rundt. Med professionel rensning fjerner vi det hele og giver dit træ nyt liv — skånsomt og effektivt.",
@@ -882,8 +879,9 @@ export function AlgebehandlingPageContent() {
         headingProcess="Pris på algebehandling af tag"
         headingFaq="Ofte stillede spørgsmål om algebehandling af tag"
         headingCta="Klar til algebehandling?"
-        beforeAfter={[
-          { before: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/alge-foer.webp", after: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/alge-efter.webp", label: "Algebehandling — før og efter" },
+        extraImages={[
+          { src: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/alge-kaspermh-1.webp", alt: "Tag med alger og mos — før algebehandling" },
+          { src: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/alge-kaspermh-2.webp", alt: "Professionel algebehandling" },
         ]}
         description={[
           "Algebehandling er den mest effektive forebyggende behandling mod alger, mos og lav på dit tag, dine fliser eller din facade. Vi bruger Neutralon — et miljøgodkendt produkt godkendt af Miljøstyrelsen.",

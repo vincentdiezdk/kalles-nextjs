@@ -13,18 +13,19 @@ const categories = [
 ];
 
 const galleryItems = [
-  { category: "fliser", label: "Fliserens — før", image: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/fliserens-foer.webp" },
-  { category: "fliser", label: "Fliserens — efter", image: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/fliserens-efter.webp" },
-  { category: "fliser", label: "Fliserens — eksempel 1", image: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/fliserens-service-1.webp" },
-  { category: "fliser", label: "Fliserens — eksempel 2", image: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/fliserens-service-2.webp" },
+  { category: "fliser", label: "Fliserens — indkørsel før", image: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/fliserens-indkoersel-foer.webp" },
+  { category: "fliser", label: "Fliserens — indkørsel efter", image: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/fliserens-indkoersel-efter.webp" },
+  { category: "fliser", label: "Fliserens — baghave før", image: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/fliserens-foer.webp" },
+  { category: "fliser", label: "Fliserens — baghave efter", image: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/fliserens-efter.webp" },
   { category: "tag", label: "Tagrens — før", image: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/tagrens-foer.webp" },
   { category: "tag", label: "Tagrens — efter", image: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/tagrens-efter.webp" },
   { category: "facade", label: "Facaderens — før & efter", image: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/facaderens-ba.webp" },
-  { category: "terrasse", label: "Terrasse — før", image: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/terrasse-foer.webp" },
-  { category: "terrasse", label: "Terrasse — før & efter", image: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/terrasse-ba.webp" },
-  { category: "terrasse", label: "Terrasse — komplet rens", image: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/terrasse-full.webp" },
-  { category: "alge", label: "Algebehandling — før", image: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/alge-foer.webp" },
-  { category: "alge", label: "Algebehandling — efter", image: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/alge-efter.webp" },
+  { category: "facade", label: "Professionel facaderens", image: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/facaderens-kaspermh.webp" },
+  { category: "terrasse", label: "Terrasse — halvvejs resultat", image: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/terrasse-foer.webp" },
+  { category: "terrasse", label: "Træterrasse før rens", image: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/terrasse-kaspermh-1.webp" },
+  { category: "terrasse", label: "Terrasse rens — halvvejs", image: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/terrasse-kaspermh-2.webp" },
+  { category: "alge", label: "Tag med alger og mos", image: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/alge-kaspermh-1.webp" },
+  { category: "alge", label: "Professionel algebehandling", image: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/alge-kaspermh-2.webp" },
   { category: "fliser", label: "Serviceaftale — før", image: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/serviceaftale-foer.webp" },
   { category: "fliser", label: "Serviceaftale — efter", image: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/serviceaftale-efter.webp" },
 ];

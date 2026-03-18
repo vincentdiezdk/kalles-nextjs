@@ -121,8 +121,8 @@ export function LocationPage({
           </h2>
           <div className="max-w-xl mx-auto">
             <BeforeAfterSlider
-              before="https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/fliserens-foer.webp"
-              after="https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/fliserens-efter.webp"
+              before="https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/fliserens-indkoersel-foer.webp"
+              after="https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/fliserens-indkoersel-efter.webp"
               label={`Fliserens i ${city} \u2014 indk\u00f8rsel`}
             />
           </div>
