@@ -28,10 +28,10 @@ const SKAT_PCT = 26;
 
 /* ─── Example calculations ─── */
 const examples = [
-  { label: "75 m² fliserens", arbejdslon: 2250, total: 2250 },
-  { label: "130 m² fliserens", arbejdslon: 3120, total: 3900 },
-  { label: "200 m² fliserens + nano", arbejdslon: 5600, total: 7000 },
-  { label: "Par — 2 × fradrag", arbejdslon: 7200, total: 9000, dobbelt: true },
+  { label: "75 m² fliserens", arbejdslon: 1350, total: 2250 },
+  { label: "130 m² fliserens", arbejdslon: 2340, total: 3900 },
+  { label: "200 m² fliserens + nano", arbejdslon: 4200, total: 7000 },
+  { label: "Par — 2 × fradrag", arbejdslon: 5400, total: 9000, dobbelt: true },
 ];
 
 /* ─── FAQ data ─── */
@@ -46,7 +46,7 @@ const faqs = [
   },
   {
     q: "Hvor meget kan jeg spare i skat på fliserens?",
-    a: "Skatteværdien af servicefradraget er ca. 26%. Hvis du betaler 3.900 kr. for fliserens (heraf 3.120 kr. i arbejdsløn ex. moms), sparer du ca. 811 kr. i skat. Er I to voksne i husstanden, kan I hver især bruge jeres fradrag — det dobbelte besparelse.",
+    a: "Skatteværdien af servicefradraget er ca. 26%. Hvis du betaler 3.900 kr. for fliserens (heraf ca. 2.340 kr. i arbejdsløn ex. moms — 75% af prisen er mandetimer), sparer du ca. 608 kr. i skat. Er I to voksne i husstanden, kan I hver især bruge jeres fradrag — det dobbelte besparelse.",
   },
   {
     q: "Kan jeg bruge servicefradraget på mit sommerhus?",
@@ -193,9 +193,9 @@ export default function ServicefradragPageContent() {
             </p>
             <p>
               Fradraget gælder for arbejdslønnen — ikke for materialer. Ved
-              fliserens udgør arbejdslønnen typisk langt størstedelen af prisen,
-              da materialeomkostningerne er minimale. Det gør fliserens til en af
-              de serviceydelser, hvor du får mest ud af dit servicefradrag.
+              fliserens udgør arbejdslønnen ca. 75% af prisen, mens de resterende
+              25% er materialer. Det gør fliserens til en af de serviceydelser,
+              hvor du får mest ud af dit servicefradrag.
             </p>
           </div>
 

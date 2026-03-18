@@ -215,8 +215,10 @@ export default function Calculator({ initialService, heading, subheading }: Calc
   // Fliserens er dækket under "Fliserensning af terrasser, indkørsler m.v."
   const SERVICE_FRADRAG_MAX = 18300;
   const FRADRAG_SKAT_PCTG = 0.26;
-  // Arbejdsløn = price ex moms (materialer er minimale ved fliserens)
-  const fradragBase = priceExMoms !== null ? Math.min(priceExMoms, SERVICE_FRADRAG_MAX) : null;
+  const LABOR_SHARE = 0.75; // 75% mandetimer, 25% materialer
+  // Kun arbejdsløn (75% af pris ex moms) er fradragsberettiget
+  const laborCost = priceExMoms !== null ? Math.round(priceExMoms * LABOR_SHARE) : null;
+  const fradragBase = laborCost !== null ? Math.min(laborCost, SERVICE_FRADRAG_MAX) : null;
   const skattebesparelse = fradragBase !== null ? Math.round(fradragBase * FRADRAG_SKAT_PCTG) : null;
   const effectivePrice = livePrice !== null && skattebesparelse !== null ? livePrice - skattebesparelse : null;
 
@@ -958,7 +960,8 @@ export default function Calculator({ initialService, heading, subheading }: Calc
                   {(() => {
                     const resMoms = Math.round(price * 0.2);
                     const resExMoms = price - resMoms;
-                    const resFradrag = Math.min(resExMoms, 18300);
+                    const resLaborCost = Math.round(resExMoms * 0.75); // 75% mandetimer
+                    const resFradrag = Math.min(resLaborCost, 18300);
                     const resSkat = Math.round(resFradrag * 0.26);
                     return (
                       <div className="mt-2 space-y-1">
