@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
+import { forwardLeadToAdmin } from "@/lib/webhook";
 import { z } from "zod";
 
 const leadSchema = z.object({
@@ -38,6 +39,19 @@ export async function POST(request: Request) {
       .single();
 
     if (error) throw new Error(error.message);
+
+    // Forward to admin (non-blocking)
+    void forwardLeadToAdmin({
+      name: parsed.name,
+      email: parsed.email || undefined,
+      phone: parsed.phone,
+      address: parsed.address || undefined,
+      service: parsed.service,
+      area_m2: parsed.areaM2,
+      estimated_price: parsed.estimatedPrice,
+      source: "prisberegner",
+    });
+
     return NextResponse.json({ success: true, estimatedPrice: data.estimated_price, id: data.id });
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error.message }, { status: 400 });
