@@ -64,9 +64,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="da" suppressHydrationWarning>
+    <html lang="da" suppressHydrationWarning className={`${cabinetGrotesk.variable} ${plusJakartaSans.variable}`}>
       <body
-        className={`${cabinetGrotesk.variable} ${plusJakartaSans.variable} font-sans antialiased bg-background text-foreground`}
+        className="font-sans antialiased bg-background text-foreground"
       >
         <ThemeProvider>
           <GlobalSchemas />
