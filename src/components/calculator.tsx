@@ -125,9 +125,21 @@ function getStaticEstimate(service: ServiceKey, area: number): number {
   }
 }
 
-export default function Calculator() {
-  const [step, setStep] = useState(1);
-  const [service, setService] = useState<ServiceKey | null>(null);
+interface CalculatorProps {
+  /** Pre-select a service and skip step 1 */
+  initialService?: ServiceKey;
+  /** Custom heading — useful when embedded on a service page */
+  heading?: string;
+  /** Custom subheading */
+  subheading?: string;
+}
+
+export { type ServiceKey };
+
+export default function Calculator({ initialService, heading, subheading }: CalculatorProps = {}) {
+  const hasInitialService = !!initialService;
+  const [step, setStep] = useState(hasInitialService ? (serviceOptions.find(s => s.key === initialService)?.hasCalculator ? 2 : 3) : 1);
+  const [service, setService] = useState<ServiceKey | null>(initialService ?? null);
   const [area, setArea] = useState<number>(75);
   const [activeAddons, setActiveAddons] = useState<Record<string, boolean>>({});
   const [name, setName] = useState("");
@@ -179,7 +191,12 @@ export default function Calculator() {
   };
 
   const handleBack = () => {
+    if (hasInitialService && step === 2) {
+      // Can't go back past the pre-selected service
+      return;
+    }
     if (step === 3 && service && !hasCalculator) {
+      if (hasInitialService) return; // Can't go back past pre-selected
       setStep(1); // Skip back over step 2 for non-calculator services
     } else {
       setStep(step - 1);
@@ -221,8 +238,14 @@ export default function Calculator() {
   };
 
   const reset = () => {
-    setStep(1);
-    setService(null);
+    if (hasInitialService) {
+      const svc = serviceOptions.find(s => s.key === initialService);
+      setStep(svc?.hasCalculator ? 2 : 3);
+      setService(initialService!);
+    } else {
+      setStep(1);
+      setService(null);
+    }
     setArea(75);
     setActiveAddons({});
     setName("");
@@ -249,10 +272,10 @@ export default function Calculator() {
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-10">
           <h2 className="font-sans font-extrabold text-2xl md:text-3xl text-foreground mb-3">
-            Beregn din pris
+            {heading || "Beregn din pris"}
           </h2>
           <p className="text-muted-foreground text-sm md:text-base max-w-xl mx-auto">
-            Få et vejledende tilbud på under 1 minut. Vi vender tilbage med et endeligt tilbud inden 24 timer.
+            {subheading || "Få et vejledende tilbud på under 1 minut. Vi vender tilbage med et endeligt tilbud inden 24 timer."}
           </p>
           <div className="flex items-center justify-center gap-4 mt-3 text-xs text-muted-foreground">
             <span className="flex items-center gap-1"><CheckCircle2 className="h-3.5 w-3.5 text-primary" /> Gratis</span>
@@ -263,7 +286,10 @@ export default function Calculator() {
 
         {/* Progress Steps */}
         <div className="flex items-center justify-center gap-2 mb-8">
-          {(hasCalculator ? [1, 2, 3] : [1, 3]).map((s, idx, arr) => (
+          {(hasInitialService
+            ? (hasCalculator ? [2, 3] : [3])
+            : (hasCalculator ? [1, 2, 3] : [1, 3])
+          ).map((s, idx, arr) => (
             <div key={s} className="flex items-center gap-2">
               <div
                 className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-colors ${
@@ -344,7 +370,7 @@ export default function Calculator() {
           {step === 2 && isFliser && (
             <div className="space-y-6" data-testid="calc-step-2">
               <h3 className="font-sans font-bold text-lg text-foreground mb-4">
-                2. Areal & tilvalg
+                {hasInitialService ? "1" : "2"}. Areal & tilvalg
               </h3>
 
               {/* Area slider */}
@@ -525,7 +551,10 @@ export default function Calculator() {
           {step === 3 && (
             <div className="space-y-4" data-testid="calc-step-3">
               <h3 className="font-sans font-bold text-lg text-foreground mb-4">
-                {hasCalculator ? "3. Dine oplysninger" : "2. Dine oplysninger"}
+                {hasInitialService
+                  ? (hasCalculator ? "2" : "1")
+                  : (hasCalculator ? "3" : "2")
+                }. Dine oplysninger
               </h3>
 
               {/* Show selected service + price summary for fliserens */}
@@ -701,7 +730,7 @@ export default function Calculator() {
           {/* Navigation */}
           {step < 4 && (
             <div className="flex items-center justify-between mt-8 pt-6 border-t border-border">
-              {step > 1 ? (
+              {step > 1 && !(hasInitialService && ((hasCalculator && step === 2) || (!hasCalculator && step === 3))) ? (
                 <Button
                   variant="ghost"
                   onClick={handleBack}

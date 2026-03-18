@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo } from "react";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   Accordion,
@@ -14,6 +13,8 @@ import { Phone, ArrowRight, CheckCircle, Shield, Clock } from "lucide-react";
 import BreadcrumbNav from "@/components/breadcrumb-nav";
 import { BeforeAfterSlider } from "@/components/before-after-slider";
 import type { BeforeAfterProps } from "@/components/before-after-slider";
+import Calculator from "@/components/calculator";
+import type { ServiceKey } from "@/components/calculator";
 
 interface FAQ {
   q: string;
@@ -40,6 +41,10 @@ export interface ServicePageProps {
   seoContent?: { heading: string; paragraphs: string[] }[];
   crossLinks?: { title: string; href: string; desc: string }[];
   showNaboRabat?: boolean;
+  /** Key for the Calculator component — embeds prisberegner with this service pre-selected */
+  serviceKey?: ServiceKey;
+  calculatorHeading?: string;
+  calculatorSubheading?: string;
 }
 
 export function ServicePage({
@@ -62,14 +67,12 @@ export function ServicePage({
   seoContent,
   crossLinks,
   showNaboRabat,
+  serviceKey,
+  calculatorHeading,
+  calculatorSubheading,
 }: ServicePageProps) {
-  const router = useRouter();
-
   const scrollToCalculator = () => {
-    router.push("/");
-    setTimeout(() => {
-      document.getElementById("prisberegner")?.scrollIntoView({ behavior: "smooth" });
-    }, 300);
+    document.getElementById("prisberegner")?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
@@ -319,37 +322,45 @@ export function ServicePage({
         </section>
       )}
 
-      {/* Bottom CTA */}
-      <section className="py-16 md:py-20 bg-primary text-primary-foreground">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="font-sans font-extrabold text-2xl md:text-3xl mb-4">
-            {headingCta || "Klar til at få det gjort?"}
-          </h2>
-          <p className="text-primary-foreground/80 max-w-xl mx-auto mb-8">
-            Beregn din pris eller ring til os for en uforpligtende snak.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Button
-              size="lg"
-              variant="secondary"
-              className="font-sans font-bold text-base"
-              onClick={scrollToCalculator}
-            >
-              Beregn din pris
-            </Button>
-            <a href="tel:+4525131797">
+      {/* Embedded Calculator */}
+      {serviceKey ? (
+        <Calculator
+          initialService={serviceKey}
+          heading={calculatorHeading || `Beregn din pris på ${title.toLowerCase()}`}
+          subheading={calculatorSubheading || `Udfyld dine oplysninger og få et vejledende tilbud på ${title.toLowerCase()} inden 24 timer.`}
+        />
+      ) : (
+        <section className="py-16 md:py-20 bg-primary text-primary-foreground">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 className="font-sans font-extrabold text-2xl md:text-3xl mb-4">
+              {headingCta || "Klar til at få det gjort?"}
+            </h2>
+            <p className="text-primary-foreground/80 max-w-xl mx-auto mb-8">
+              Beregn din pris eller ring til os for en uforpligtende snak.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Button
                 size="lg"
-                variant="outline"
-                className="font-sans font-bold text-base border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 w-full sm:w-auto gap-2"
+                variant="secondary"
+                className="font-sans font-bold text-base"
+                onClick={scrollToCalculator}
               >
-                <Phone className="h-4 w-4" />
-                Ring 25 13 17 97
+                Beregn din pris
               </Button>
-            </a>
+              <a href="tel:+4525131797">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="font-sans font-bold text-base border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 w-full sm:w-auto gap-2"
+                >
+                  <Phone className="h-4 w-4" />
+                  Ring 25 13 17 97
+                </Button>
+              </a>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
     </div>
   );
 }
@@ -405,6 +416,7 @@ export function FliserensPageContent() {
         title="Fliserens"
         subtitle="Professionel fliserens i Midtjylland"
         price="Fra 30 kr./m²"
+        serviceKey="fliser"
         heroImage="https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/services/fliserens.webp"
         headingBeforeAfter="Professionel fliserens med hedt vand"
         headingBenefits="Fordele ved professionel rens af fliser"
@@ -530,6 +542,7 @@ export function TagrensPageContent() {
         title="Tagrens & Tagmaling"
         subtitle="Professionel tagrens i Midtjylland"
         price="Fra 10.997 kr."
+        serviceKey="tag"
         heroImage="https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/services/tagrens.webp"
         headingBeforeAfter="Professionel tagrens & tagmaling"
         headingBenefits="Fordele ved professionel tagrens"
@@ -647,6 +660,7 @@ export function FacaderensPageContent() {
         title="Facaderens"
         subtitle="Professionel facaderens i Midtjylland"
         price="Fra 2.997 kr."
+        serviceKey="facade"
         heroImage="https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/services/facaderens.webp"
         headingBenefits="Fordele ved professionel facaderens"
         headingProcess="Sådan foregår en facaderens"
@@ -749,6 +763,7 @@ export function TerrassePageContent() {
         title="Træterrasse Rens"
         subtitle="Professionel terrasse-rens i Midtjylland"
         price="Fra 40 kr./m² (min. 2.497 kr.)"
+        serviceKey="terrasse"
         heroImage="https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/services/terrasse.webp"
         headingBeforeAfter="Skånsom og effektiv træterrasse rens"
         headingBenefits="Fordele ved professionel terrasse-rens"
@@ -860,6 +875,7 @@ export function AlgebehandlingPageContent() {
         title="Algebehandling af Tag"
         subtitle="Miljøgodkendt algebehandling i Midtjylland"
         price="995 kr. (op til 200 m²)"
+        serviceKey="alge"
         heroImage="https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/services/algerens.webp"
         headingBeforeAfter="Algebehandling af tag & fliser"
         headingBenefits="Fordele ved algebehandling"

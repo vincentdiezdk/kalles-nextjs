@@ -38,6 +38,7 @@ export default function TagmalingPageContent() {
         title="Tagmaling – Professionel tagmaling"
         subtitle="Forlæng dit tags levetid og giv huset nyt liv"
         price="Kontakt os for pris"
+        serviceKey="tag"
         headingBenefits="Fordele ved professionel tagmaling"
         headingProcess="Sådan foregår en tagmaling"
         headingFaq="Ofte stillede spørgsmål om tagmaling"
