@@ -186,6 +186,7 @@ export default function KontaktPageContent() {
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         required
+                        autoComplete="name"
                         data-testid="contact-name-input"
                       />
                     </div>
@@ -200,6 +201,7 @@ export default function KontaktPageContent() {
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                         required
+                        autoComplete="tel"
                         data-testid="contact-phone-input"
                       />
                     </div>
@@ -214,6 +216,7 @@ export default function KontaktPageContent() {
                       placeholder="Din email (valgfrit)"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
+                      autoComplete="email"
                       data-testid="contact-email-input"
                     />
                   </div>

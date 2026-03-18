@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Phone, Mail, MapPin, Facebook, Instagram } from "lucide-react";
+import { Phone, Mail, MapPin, Facebook, Instagram, Clock, ShieldCheck } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -98,6 +98,18 @@ export default function Footer() {
                 <span>Vibevej 38, 7330 Brande</span>
               </li>
             </ul>
+            {/* Åbningstider */}
+            <div className="mt-5 pt-4 border-t border-background/10">
+              <div className="flex items-start gap-2 text-sm text-background/70">
+                <Clock className="h-4 w-4 shrink-0 mt-0.5" />
+                <div>
+                  <p className="font-medium text-background/90">Åbningstider</p>
+                  <p>Man–Fre: 07:00–17:00</p>
+                  <p>Lørdag: 08:00–14:00</p>
+                  <p>Søndag: Lukket</p>
+                </div>
+              </div>
+            </div>
             <div className="mt-6 flex items-center gap-3">
               <a
                 href="https://www.facebook.com/kallesalgerens"
@@ -123,7 +135,24 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-background/10 flex flex-col md:flex-row items-center justify-between gap-4">
+        {/* Miljøstyrelsen badge */}
+        <div className="mt-10 pt-6 border-t border-background/10 flex flex-col sm:flex-row items-center justify-center gap-3 text-sm text-background/60">
+          <ShieldCheck className="h-5 w-5 text-green-400 shrink-0" />
+          <span>
+            Vi bruger udelukkende{" "}
+            <a
+              href="https://mst.dk/natur-vand/vand-i-hverdagen/spildevand/regnvand-og-overfladevand/vask-og-rensning-af-tage-facader-og-belaegninger/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-background transition-colors"
+              data-testid="footer-miljostyrelsen-link"
+            >
+              Miljøstyrelsen-godkendte produkter
+            </a>
+          </span>
+        </div>
+
+        <div className="mt-6 pt-6 border-t border-background/10 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-xs text-background/40">
             © {new Date().getFullYear()} Kalles Algerens ApS. Alle rettigheder forbeholdes.
           </p>

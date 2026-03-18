@@ -852,6 +852,7 @@ export default function Calculator({ initialService, heading, subheading }: Calc
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     required
+                    autoComplete="name"
                     data-testid="calc-name-input"
                   />
                 </div>
@@ -865,6 +866,7 @@ export default function Calculator({ initialService, heading, subheading }: Calc
                     placeholder="Din email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    autoComplete="email"
                     data-testid="calc-email-input"
                   />
                 </div>
@@ -879,6 +881,7 @@ export default function Calculator({ initialService, heading, subheading }: Calc
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     required
+                    autoComplete="tel"
                     data-testid="calc-phone-input"
                   />
                 </div>
@@ -891,6 +894,7 @@ export default function Calculator({ initialService, heading, subheading }: Calc
                     placeholder="Din adresse"
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
+                    autoComplete="street-address"
                     data-testid="calc-address-input"
                   />
                 </div>
@@ -903,6 +907,7 @@ export default function Calculator({ initialService, heading, subheading }: Calc
                     placeholder="F.eks. 7330"
                     value={postNr}
                     onChange={(e) => setPostNr(e.target.value)}
+                    autoComplete="postal-code"
                     data-testid="calc-postnr-input"
                   />
                 </div>

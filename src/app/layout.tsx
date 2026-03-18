@@ -65,6 +65,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="da" suppressHydrationWarning className={`${cabinetGrotesk.variable} ${plusJakartaSans.variable}`}>
+      <head>
+        <link
+          rel="preload"
+          href="https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/hero/kasper-hero.webp"
+          as="image"
+          type="image/webp"
+        />
+      </head>
       <body
         className="font-sans antialiased bg-background text-foreground"
       >

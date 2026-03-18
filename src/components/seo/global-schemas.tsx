@@ -4,7 +4,7 @@ import { useEffect } from "react";
 
 const localBusiness = {
   "@context": "https://schema.org",
-  "@type": "LocalBusiness",
+  "@type": "HomeAndConstructionBusiness",
   "@id": "https://kaspermh.dk/#localbusiness",
   name: "Kalles Algerens ApS",
   description:
@@ -38,7 +38,7 @@ const localBusiness = {
       closes: "14:00",
     },
   ],
-  priceRange: "$$",
+  priceRange: "kr–krkr",
   image:
     "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/logo-kalles-algerens.png",
   sameAs: [
