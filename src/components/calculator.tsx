@@ -24,8 +24,7 @@ import {
   Shovel,
   Receipt,
   BadgePercent,
-  Paintbrush,
-  Bug,
+
 } from "lucide-react";
 
 // Lazy-load the area measurement tool (requires Leaflet = browser-only)
@@ -44,7 +43,7 @@ interface ServiceInfo {
 
 const serviceOptions: ServiceInfo[] = [
   { key: "fliser", label: "Fliserens", icon: Droplets, description: "Fliser, sten & belægning", hasCalculator: true, staticPrice: "" },
-  { key: "tag", label: "Tagrens", icon: Home, description: "Tag rens & maling", hasCalculator: true, staticPrice: "Fra 10.997 kr." },
+  { key: "tag", label: "Tagrens", icon: Home, description: "Tag rens & maling", hasCalculator: false, staticPrice: "Fra 10.997 kr." },
   { key: "facade", label: "Facaderens", icon: Building2, description: "Mur, puds & beton", hasCalculator: false, staticPrice: "Minimum 2.997 kr." },
   { key: "terrasse", label: "Terrasse", icon: TreePine, description: "Træterrasse rens", hasCalculator: false, staticPrice: "Fra 40 kr/m², min. 2.497 kr." },
   { key: "alge", label: "Algebehandling", icon: Sparkles, description: "Alge & mos fjernelse", hasCalculator: false, staticPrice: "995 kr. (op til 200 m²)" },
@@ -94,44 +93,7 @@ const addons: Addon[] = [
   },
 ];
 
-// ─── Tag-specific configuration ─────────────────────
-type TagType = "betontagsten" | "tegl" | "eternit" | "staal" | "andet";
 
-interface TagTypeOption {
-  key: TagType;
-  label: string;
-  description: string;
-}
-
-const tagTypeOptions: TagTypeOption[] = [
-  { key: "betontagsten", label: "Betontagsten", description: "Mest almindelig tagtype" },
-  { key: "tegl", label: "Teglsten", description: "Klassisk rød/sort tegl" },
-  { key: "eternit", label: "Eternit / Fibercement", description: "Bølge- eller skiferplade" },
-  { key: "staal", label: "Ståltag", description: "Metal- eller ståltag" },
-  { key: "andet", label: "Andet / Ved ikke", description: "Vi vurderer ved besigtigelse" },
-];
-
-interface TagAddon {
-  key: string;
-  label: string;
-  description: string;
-  icon: typeof ShieldCheck;
-}
-
-const tagAddons: TagAddon[] = [
-  {
-    key: "tagAlgebehandling",
-    label: "Algebehandling af tag",
-    description: "Forebyggende behandling mod alger & mos — fra 995 kr.",
-    icon: Bug,
-  },
-  {
-    key: "tagmaling",
-    label: "Tagmaling",
-    description: "Nyt udseende og ekstra beskyttelse — pris efter aftale",
-    icon: Paintbrush,
-  },
-];
 
 function calculateFliserPrice(
   area: number,
@@ -195,13 +157,9 @@ export default function Calculator({ initialService, heading, subheading }: Calc
   const [submitted, setSubmitted] = useState(false);
   const [gdprConsent, setGdprConsent] = useState(false);
 
-  // Tag-specific state
-  const [tagType, setTagType] = useState<TagType | null>(null);
-  const [tagArea, setTagArea] = useState<number>(120);
-  const [tagAddonsActive, setTagAddonsActive] = useState<Record<string, boolean>>({});
+
 
   const isFliser = service === "fliser";
-  const isTag = service === "tag";
   const hasCalculator = serviceOptions.find(s => s.key === service)?.hasCalculator ?? false;
 
   // Live price calculation for fliserens
@@ -226,7 +184,6 @@ export default function Calculator({ initialService, heading, subheading }: Calc
     if (step === 1) return !!service;
     if (step === 2) {
       if (isFliser) return area > 0;
-      if (isTag) return tagArea > 0; // tagType is optional
       return true;
     }
     if (step === 3) return name.trim() !== "" && phone.trim() !== "" && gdprConsent;
@@ -261,8 +218,6 @@ export default function Calculator({ initialService, heading, subheading }: Calc
     if (!service || !name.trim() || !phone.trim()) return;
     const estimated = isFliser
       ? calculateFliserPrice(area || 75, activeAddons)
-      : isTag
-      ? getStaticEstimate("tag", tagArea || 120)
       : getStaticEstimate(service, area || 50);
     setPrice(estimated);
     setSubmitting(true);
@@ -271,13 +226,6 @@ export default function Calculator({ initialService, heading, subheading }: Calc
     let condition: string | null = null;
     if (isFliser) {
       condition = Object.entries(activeAddons).filter(([, v]) => v).map(([k]) => k).join(",") || "ingen tilvalg";
-    } else if (isTag) {
-      const parts: string[] = [];
-      if (tagType) parts.push(`tagtype: ${tagTypeOptions.find(t => t.key === tagType)?.label || tagType}`);
-      parts.push(`areal: ${tagArea} m\u00B2`);
-      const activeTagAddons = Object.entries(tagAddonsActive).filter(([, v]) => v).map(([k]) => tagAddons.find(a => a.key === k)?.label || k);
-      if (activeTagAddons.length > 0) parts.push(`tilvalg: ${activeTagAddons.join(", ")}`);
-      condition = parts.join(" | ");
     }
 
     try {
@@ -286,7 +234,7 @@ export default function Calculator({ initialService, heading, subheading }: Calc
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           service,
-          areaM2: isTag ? tagArea : (area || null),
+          areaM2: isFliser ? (area || null) : null,
           condition,
           estimatedPrice: estimated,
           name: name.trim(),
@@ -315,9 +263,6 @@ export default function Calculator({ initialService, heading, subheading }: Calc
     }
     setArea(75);
     setActiveAddons({});
-    setTagType(null);
-    setTagArea(120);
-    setTagAddonsActive({});
     setName("");
     setPhone("");
     setEmail("");
@@ -618,185 +563,7 @@ export default function Calculator({ initialService, heading, subheading }: Calc
             </div>
           )}
 
-          {/* Step 2: Tag details (tagtype, area, add-ons) */}
-          {step === 2 && isTag && (
-            <div className="space-y-6" data-testid="calc-step-2-tag">
-              <h3 className="font-sans font-bold text-lg text-foreground mb-4">
-                {hasInitialService ? "1" : "2"}. Tagoplysninger
-              </h3>
 
-              {/* Tag type selector */}
-              <div>
-                <Label className="text-sm font-medium mb-3 block">Tagtype</Label>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                  {tagTypeOptions.map((opt) => {
-                    const selected = tagType === opt.key;
-                    return (
-                      <button
-                        key={opt.key}
-                        onClick={() => setTagType(opt.key)}
-                        className={`p-3 rounded-xl border-2 text-left transition-all hover:-translate-y-0.5 ${
-                          selected
-                            ? "border-primary bg-primary/5 shadow-sm"
-                            : "border-border hover:border-primary/30 hover:shadow-sm"
-                        }`}
-                        data-testid={`calc-tagtype-${opt.key}`}
-                      >
-                        <div className="font-sans font-semibold text-sm text-foreground">
-                          {opt.label}
-                        </div>
-                        <div className="text-[11px] text-muted-foreground mt-0.5">
-                          {opt.description}
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Asbestos warning */}
-              <div className="bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/30 rounded-lg p-3">
-                <p className="text-xs text-amber-800 dark:text-amber-300">
-                  ⚠️ OBS: Vi renser ikke asbest/eternit-tage med asbest. Kontakt os hvis du er i tvivl om dit tag indeholder asbest.
-                </p>
-              </div>
-
-              {/* Tag area slider */}
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <Label className="text-sm font-medium">Tagareal (ca.)</Label>
-                  <div className="flex items-center gap-2">
-                    <Input
-                      type="number"
-                      min={50}
-                      max={500}
-                      value={tagArea}
-                      onChange={(e) => {
-                        const v = parseInt(e.target.value) || 50;
-                        setTagArea(Math.min(500, Math.max(50, v)));
-                        setAreaFromTool(false);
-                      }}
-                      className="w-20 h-8 text-center text-sm font-semibold"
-                      data-testid="calc-tag-area-input"
-                    />
-                    <span className="text-sm text-muted-foreground font-medium">m²</span>
-                  </div>
-                </div>
-                <Slider
-                  value={[tagArea]}
-                  onValueChange={([v]) => {
-                    setTagArea(v);
-                    setAreaFromTool(false);
-                  }}
-                  min={50}
-                  max={500}
-                  step={5}
-                  className="w-full"
-                  data-testid="calc-tag-area-slider"
-                />
-                <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                  <span>50 m²</span>
-                  <span>500 m²</span>
-                </div>
-                {areaFromTool && tagArea > 0 && (
-                  <p className="text-xs text-primary font-medium mt-1.5 flex items-center gap-1">
-                    <CheckCircle2 className="h-3 w-3" />
-                    Opmålt fra luftfoto
-                  </p>
-                )}
-              </div>
-
-              {/* Measurement tool toggle */}
-              {!showMeasurementTool && (
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setShowMeasurementTool(true)}
-                  className="gap-1.5 text-xs"
-                  data-testid="calc-tag-open-measurement"
-                >
-                  <Ruler className="h-3.5 w-3.5" />
-                  Opmål tag på luftfoto
-                </Button>
-              )}
-
-              {showMeasurementTool && (
-                <div className="border border-border rounded-xl p-4 bg-muted/30">
-                  <Suspense
-                    fallback={
-                      <div className="flex items-center justify-center py-12">
-                        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-                      </div>
-                    }
-                  >
-                    <AreaMeasurementTool
-                      initialAddress={address}
-                      onAreaConfirmed={(m2) => {
-                        setTagArea(Math.min(500, Math.max(50, m2)));
-                        setAreaFromTool(true);
-                        setShowMeasurementTool(false);
-                      }}
-                    />
-                  </Suspense>
-                </div>
-              )}
-
-              {/* Tag add-ons */}
-              <div>
-                <Label className="text-sm font-medium mb-3 block">Ønsker du tilvalg?</Label>
-                <div className="space-y-3">
-                  {tagAddons.map((addon) => {
-                    const Icon = addon.icon;
-                    const active = !!tagAddonsActive[addon.key];
-                    return (
-                      <div
-                        key={addon.key}
-                        className={`flex items-center justify-between p-4 rounded-xl border-2 transition-all cursor-pointer ${
-                          active
-                            ? "border-primary bg-primary/5"
-                            : "border-border hover:border-primary/20"
-                        }`}
-                        onClick={() => setTagAddonsActive(prev => ({ ...prev, [addon.key]: !prev[addon.key] }))}
-                        data-testid={`calc-tag-addon-${addon.key}`}
-                      >
-                        <div className="flex items-center gap-3">
-                          <Icon className={`h-5 w-5 shrink-0 ${active ? "text-primary" : "text-muted-foreground"}`} />
-                          <div>
-                            <div className="font-sans font-semibold text-sm text-foreground">
-                              {addon.label}
-                            </div>
-                            <div className="text-xs text-muted-foreground">
-                              {addon.description}
-                            </div>
-                          </div>
-                        </div>
-                        <div onClick={(e) => e.stopPropagation()}>
-                          <Switch
-                            checked={active}
-                            onCheckedChange={() => setTagAddonsActive(prev => ({ ...prev, [addon.key]: !prev[addon.key] }))}
-                            aria-label={addon.label}
-                          />
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Price indication */}
-              <div className="bg-primary/5 border border-primary/20 rounded-xl p-5 text-center">
-                <p className="text-xs text-muted-foreground mb-1">Vejledende startpris for tagrens</p>
-                <div className="text-2xl md:text-3xl font-sans font-extrabold text-primary">
-                  Fra 10.997 kr.
-                </div>
-                <p className="text-xs text-muted-foreground mt-2">
-                  Endelig pris afhænger af {tagArea} m² tag{tagType ? `, ${tagTypeOptions.find(t => t.key === tagType)?.label?.toLowerCase()}` : ""}, tilstand og adgangsforhold.
-                  Vi sender et præcist tilbud inden 24 timer.
-                </p>
-              </div>
-            </div>
-          )}
 
           {/* Step 3: Contact */}
           {step === 3 && (
@@ -821,23 +588,8 @@ export default function Calculator({ initialService, heading, subheading }: Calc
                 </div>
               )}
 
-              {/* Show selected service summary for tag */}
-              {isTag && (
-                <div className="bg-primary/5 border border-primary/20 rounded-lg p-3 mb-4">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-foreground font-medium">
-                      Tagrens — {tagArea} m²{tagType ? ` (${tagTypeOptions.find(t => t.key === tagType)?.label})` : ""}
-                      {Object.values(tagAddonsActive).some(v => v)
-                        ? " + " + Object.entries(tagAddonsActive).filter(([, v]) => v).map(([k]) => tagAddons.find(a => a.key === k)?.label).join(", ")
-                        : ""}
-                    </span>
-                    <span className="text-sm font-bold text-primary">Fra 10.997 kr.</span>
-                  </div>
-                </div>
-              )}
-
               {/* Show selected service for non-calculator */}
-              {!isFliser && !isTag && service && (
+              {!isFliser && service && (
                 <div className="bg-primary/5 border border-primary/20 rounded-lg p-3 mb-4">
                   <span className="text-sm text-foreground font-medium">
                     {serviceOptions.find(s => s.key === service)?.label} — {serviceOptions.find(s => s.key === service)?.staticPrice}
@@ -982,25 +734,6 @@ export default function Calculator({ initialService, heading, subheading }: Calc
                       </div>
                     );
                   })()}
-                </>
-              ) : isTag ? (
-                <>
-                  <div className="text-3xl md:text-4xl font-sans font-extrabold text-primary mb-2">
-                    Fra {price.toLocaleString("da-DK")} kr.
-                  </div>
-                  <p className="text-sm text-muted-foreground mb-1">
-                    Tagrens — {tagArea} m²{tagType ? ` (${tagTypeOptions.find(t => t.key === tagType)?.label})` : ""}
-                  </p>
-                  {Object.entries(tagAddonsActive).filter(([, v]) => v).length > 0 && (
-                    <p className="text-xs text-muted-foreground">
-                      Tilvalg: {Object.entries(tagAddonsActive).filter(([, v]) => v).map(([k]) =>
-                        tagAddons.find(a => a.key === k)?.label
-                      ).join(", ")}
-                    </p>
-                  )}
-                  <p className="text-xs text-muted-foreground mt-2">
-                    Endelig pris afhænger af tagets tilstand og adgangsforhold.
-                  </p>
                 </>
               ) : (
                 <p className="text-sm text-muted-foreground mb-2">
