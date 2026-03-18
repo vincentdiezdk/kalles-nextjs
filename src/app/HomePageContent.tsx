@@ -29,6 +29,7 @@ import {
   Users,
   Ruler,
   BadgeCheck,
+  Leaf,
 } from "lucide-react";
 
 // ─── Hero ──────────────────────────────────────────
@@ -39,6 +40,20 @@ function HeroSection() {
 
   return (
     <section className="relative overflow-hidden pt-24 pb-16 md:pt-32 md:pb-24" data-testid="hero-section">
+      {/* CSS fade-in + slide-up animation */}
+      <style>{`
+        @keyframes hero-fade-slide {
+          from { opacity: 0; transform: translateY(24px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .hero-animate {
+          animation: hero-fade-slide 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+        .hero-animate-delay-1 { animation-delay: 0.15s; }
+        .hero-animate-delay-2 { animation-delay: 0.3s; }
+        .hero-animate-delay-3 { animation-delay: 0.45s; }
+      `}</style>
+
       {/* Background pattern */}
       <div className="absolute inset-0 -z-10">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.06] via-transparent to-primary/[0.03]" />
@@ -60,31 +75,31 @@ function HeroSection() {
               Miljøgodkendt af Miljøstyrelsen
             </div>
 
-            <h1 className="font-sans font-extrabold text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] text-foreground leading-[1.1] mb-6">
+            <h1 className="hero-animate font-sans font-extrabold text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] text-foreground leading-[1.1] mb-6">
               Dine fliser fortjener{" "}
               <span className="text-primary">at se nye ud igen</span>
             </h1>
 
-            <p className="text-base md:text-lg text-muted-foreground max-w-2xl mb-4 leading-relaxed">
-              Professionel udendørs rengøring med miljøgodkendte produkter og varmt vand under højt tryk.
-              Vi dækker hele Midtjylland — fra Herning og Ikast til Brande og omegn.
+            <p className="hero-animate hero-animate-delay-1 text-base md:text-lg text-muted-foreground max-w-2xl mb-4 leading-relaxed">
+              Professionel fliserens, algerens og tagrens i Herning, Ikast og hele Midtjylland — fra 30 kr./m²
             </p>
 
-            {/* Micro trust signals in hero */}
-            <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted-foreground mb-6">
+            {/* Trust-bar — single location, directly under subheadline */}
+            <div className="hero-animate hero-animate-delay-2 flex flex-wrap gap-x-4 gap-y-1.5 text-sm text-muted-foreground mb-6">
               <span className="flex items-center gap-1"><Users className="h-3.5 w-3.5 text-primary" /> 500+ tilfredse kunder</span>
               <span className="flex items-center gap-1"><Shield className="h-3.5 w-3.5 text-primary" /> Op til 10 års garanti</span>
               <span className="flex items-center gap-1"><Clock className="h-3.5 w-3.5 text-primary" /> Svar inden 24 timer</span>
+              <span className="flex items-center gap-1"><Leaf className="h-3.5 w-3.5 text-primary" /> Miljøgodkendte produkter</span>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-3 mb-4">
+            <div className="hero-animate hero-animate-delay-3 flex flex-col sm:flex-row gap-3 mb-4">
               <Button
                 size="lg"
                 className="font-sans font-bold text-base gap-2 shadow-md hover:shadow-lg transition-shadow"
                 onClick={scrollToCalculator}
                 data-testid="hero-cta-beregn"
               >
-                Se din pris på 60 sek.
+                Beregn din pris
                 <ArrowRight className="h-4 w-4" />
               </Button>
               <a href="tel:+4525131797">
@@ -99,7 +114,7 @@ function HeroSection() {
                 </Button>
               </a>
             </div>
-            <p className="text-xs text-muted-foreground">Ingen binding. Uforpligtende tilbud inden 24 timer.</p>
+            <p className="text-xs text-muted-foreground">Gratis og uforpligtende tilbud · Svar inden 24 timer</p>
           </div>
 
           {/* Hero image */}
@@ -194,6 +209,14 @@ function ServicesSection() {
       href: "/algebehandling-af-tag",
       image: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/services/algerens.webp",
     },
+    {
+      icon: Users,
+      title: "Nabo-rabat",
+      price: "Spar op til 10%",
+      desc: "Bestil sammen med din nabo og spar begge penge på jeres renseopgave.",
+      href: "/nabo-rabat",
+      image: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/services/fliserens.webp",
+    },
   ];
 
   return (
@@ -247,12 +270,44 @@ function ServicesSection() {
           })}
         </div>
 
+        {/* Pakke-struktur for Fliserens & Tagrens */}
+        <AnimateOnScroll animation="fade-up" className="mt-12">
+          <div className="text-center mb-6">
+            <h3 className="font-sans font-bold text-xl text-foreground">Vælg din pakke</h3>
+            <p className="text-sm text-muted-foreground mt-1">Gælder fliserens og tagrens</p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto">
+            {/* Basis */}
+            <div className="bg-card border border-border rounded-xl p-5 text-center">
+              <h4 className="font-sans font-bold text-base text-foreground mb-1">Basis-rens</h4>
+              <p className="text-xs text-muted-foreground mb-3">Højtryksrens</p>
+              <div className="text-2xl font-sans font-extrabold text-foreground mb-1">fra 30 kr.</div>
+              <p className="text-xs text-muted-foreground">pr. m²</p>
+            </div>
+            {/* Komplet — Mest populær */}
+            <div className="bg-card border-2 border-primary rounded-xl p-5 text-center relative">
+              <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground text-xs font-bold px-3 py-0.5 rounded-full whitespace-nowrap">Mest populær</span>
+              <h4 className="font-sans font-bold text-base text-foreground mb-1 mt-1">Komplet-rens</h4>
+              <p className="text-xs text-muted-foreground mb-3">Rens + algebehandling</p>
+              <div className="text-2xl font-sans font-extrabold text-primary mb-1">fra 45 kr.</div>
+              <p className="text-xs text-muted-foreground">pr. m²</p>
+            </div>
+            {/* Premium */}
+            <div className="bg-card border border-border rounded-xl p-5 text-center">
+              <h4 className="font-sans font-bold text-base text-foreground mb-1">Premium-rens</h4>
+              <p className="text-xs text-muted-foreground mb-3">Rens + alge + imprægnering</p>
+              <div className="text-2xl font-sans font-extrabold text-foreground mb-1">fra 60 kr.</div>
+              <p className="text-xs text-muted-foreground">pr. m²</p>
+            </div>
+          </div>
+        </AnimateOnScroll>
+
         {/* Nabo-rabat banner */}
         <AnimateOnScroll animation="fade-in" className="mt-8">
           <div className="border-2 border-dashed border-primary/30 rounded-xl p-6 bg-primary/[0.03] flex flex-col sm:flex-row items-center justify-between gap-4">
             <div>
               <h3 className="font-sans font-bold text-lg text-foreground">
-                🏘️ Nabo-rabat — Spar op til 20%
+                🏘️ Nabo-rabat — Spar op til 10%
               </h3>
               <p className="text-sm text-muted-foreground mt-1">
                 Bestil sammen med din nabo og spar begge penge. Jo flere naboer, jo større rabat.
@@ -359,12 +414,75 @@ function CTATextSection() {
 }
 
 // ─── Process ──────────────────────────────────────
+// Custom SVG icons for process steps
+function ProcessIconCalculator() {
+  return (
+    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="10" y="6" width="28" height="36" rx="4" stroke="hsl(var(--primary))" strokeWidth="2.5" />
+      <rect x="14" y="12" width="20" height="8" rx="2" fill="hsl(var(--primary))" opacity="0.15" />
+      <circle cx="18" cy="28" r="2" fill="hsl(var(--primary))" />
+      <circle cx="24" cy="28" r="2" fill="hsl(var(--primary))" />
+      <circle cx="30" cy="28" r="2" fill="hsl(var(--primary))" />
+      <circle cx="18" cy="34" r="2" fill="hsl(var(--primary))" />
+      <circle cx="24" cy="34" r="2" fill="hsl(var(--primary))" />
+      <rect x="27" y="32" width="6" height="4" rx="1" fill="hsl(var(--primary))" />
+    </svg>
+  );
+}
+function ProcessIconCalendar() {
+  return (
+    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="8" y="10" width="32" height="30" rx="4" stroke="hsl(var(--primary))" strokeWidth="2.5" />
+      <path d="M8 20H40" stroke="hsl(var(--primary))" strokeWidth="2.5" />
+      <path d="M16 6V14" stroke="hsl(var(--primary))" strokeWidth="2.5" strokeLinecap="round" />
+      <path d="M32 6V14" stroke="hsl(var(--primary))" strokeWidth="2.5" strokeLinecap="round" />
+      <circle cx="24" cy="30" r="4" fill="hsl(var(--primary))" opacity="0.2" stroke="hsl(var(--primary))" strokeWidth="2" />
+      <path d="M22 30L23.5 31.5L26.5 28.5" stroke="hsl(var(--primary))" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+function ProcessIconClean() {
+  return (
+    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M18 42V22" stroke="hsl(var(--primary))" strokeWidth="2.5" strokeLinecap="round" />
+      <path d="M14 22C14 14 18 8 18 8C18 8 22 14 22 22" stroke="hsl(var(--primary))" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M10 22H26" stroke="hsl(var(--primary))" strokeWidth="2.5" strokeLinecap="round" />
+      <path d="M30 18L34 10" stroke="hsl(var(--primary))" strokeWidth="2" strokeLinecap="round" opacity="0.5" />
+      <path d="M34 20L40 16" stroke="hsl(var(--primary))" strokeWidth="2" strokeLinecap="round" opacity="0.5" />
+      <path d="M32 26L38 24" stroke="hsl(var(--primary))" strokeWidth="2" strokeLinecap="round" opacity="0.5" />
+      <circle cx="34" cy="10" r="2" fill="hsl(var(--primary))" opacity="0.3" />
+      <circle cx="40" cy="16" r="1.5" fill="hsl(var(--primary))" opacity="0.3" />
+    </svg>
+  );
+}
+function ProcessIconResult() {
+  return (
+    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="24" cy="24" r="16" stroke="hsl(var(--primary))" strokeWidth="2.5" fill="hsl(var(--primary))" fillOpacity="0.08" />
+      <path d="M16 24L21 29L32 18" stroke="hsl(var(--primary))" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx="38" cy="10" r="2" fill="hsl(var(--primary))" opacity="0.4" />
+      <circle cx="40" cy="18" r="1.5" fill="hsl(var(--primary))" opacity="0.3" />
+      <circle cx="10" cy="12" r="1.5" fill="hsl(var(--primary))" opacity="0.3" />
+    </svg>
+  );
+}
+
 function ProcessSection() {
+  const scrollToCalculator = () => {
+    document.getElementById("prisberegner")?.scrollIntoView({ behavior: "smooth" });
+  };
+
   const steps = [
-    { num: "1", title: "Beregn pris", desc: "Brug vores prisberegner og få et vejledende tilbud med det samme.", icon: "📱" },
-    { num: "2", title: "Vi aftaler dato", desc: "Vi ringer dig op inden 24 timer og finder en dato der passer.", icon: "📅" },
-    { num: "3", title: "Professionel rens", desc: "Vi møder op til tiden med professionelt udstyr og miljøgodkendte produkter.", icon: "🧹" },
-    { num: "4", title: "Flot resultat", desc: "Du nyder flotte, rene udendørs flader — med op til 10 års garanti.", icon: "✨" },
+    {
+      num: "1",
+      title: "Beregn pris",
+      desc: "Brug vores prisberegner og få et vejledende tilbud med det samme.",
+      icon: <ProcessIconCalculator />,
+      anchor: true,
+    },
+    { num: "2", title: "Vi aftaler tidspunkt", desc: "Vi ringer dig op inden 24 timer og finder en dato der passer.", icon: <ProcessIconCalendar />, anchor: false },
+    { num: "3", title: "Vi renser og behandler", desc: "Vi møder op til tiden med professionelt udstyr og miljøgodkendte produkter.", icon: <ProcessIconClean />, anchor: false },
+    { num: "4", title: "Se resultatet", desc: "Du nyder flotte, rene udendørs flader — med op til 10 års garanti.", icon: <ProcessIconResult />, anchor: false },
   ];
 
   return (
@@ -381,12 +499,20 @@ function ProcessSection() {
           {steps.map((s, i) => (
             <AnimateOnScroll key={i} animation="fade-up" delay={i * 150}>
               <div className="text-center">
-                <div className="text-4xl mb-4">{s.icon}</div>
+                <div className="flex justify-center mb-4">{s.icon}</div>
                 <div className="w-10 h-10 rounded-full bg-primary text-primary-foreground font-bold text-lg flex items-center justify-center mx-auto mb-3">
                   {s.num}
                 </div>
                 <h3 className="font-sans font-bold text-base text-foreground mb-2">{s.title}</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">{s.desc}</p>
+                {s.anchor && (
+                  <button
+                    onClick={scrollToCalculator}
+                    className="mt-2 text-sm font-medium text-primary hover:underline inline-flex items-center gap-1"
+                  >
+                    → Prøv beregneren
+                  </button>
+                )}
               </div>
             </AnimateOnScroll>
           ))}
@@ -638,6 +764,33 @@ function BottomCTA() {
 
 // ─── Before/After Showcase ──────────────────────────────────
 function BeforeAfterShowcase() {
+  const sliders = [
+    {
+      before: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/fliserens-foer.webp",
+      after: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/fliserens-efter.webp",
+      label: "Fliserens — indkørsel",
+      factBadge: "Holder op til 10 år med algebehandling",
+    },
+    {
+      before: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/tagrens-foer.webp",
+      after: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/tagrens-efter.webp",
+      label: "Tagrens — betontag",
+      factBadge: "Op til 10 års garanti via serviceaftale",
+    },
+    {
+      before: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/tagmaling-foer.webp",
+      after: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/tagmaling-efter.webp",
+      label: "Træterrasse — rensning",
+      factBadge: "Skånsom rens forlænger træets levetid",
+    },
+    {
+      before: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/tagmaling-foer.webp",
+      after: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/tagmaling-efter.webp",
+      label: "Facaderens — murværk",
+      factBadge: "Miljøgodkendte produkter fra Neutralon",
+    },
+  ];
+
   return (
     <section className="py-16 md:py-24 bg-muted/30" data-testid="before-after-showcase">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -647,25 +800,21 @@ function BeforeAfterShowcase() {
               Se forskellen
             </h2>
             <p className="text-muted-foreground max-w-xl mx-auto">
-              Træk for at se resultatet af professionel fliserens med varmt vand og miljøgodkendte produkter.
+              Træk for at se resultatet af professionel rens med varmt vand og miljøgodkendte produkter.
             </p>
           </div>
         </AnimateOnScroll>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <AnimateOnScroll animation="fade-up" delay={0}>
-            <BeforeAfterSlider
-              before="https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/fliserens-foer.webp"
-              after="https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/fliserens-efter.webp"
-              label="Fliserens — indkørsel"
-            />
-          </AnimateOnScroll>
-          <AnimateOnScroll animation="fade-up" delay={150}>
-            <BeforeAfterSlider
-              before="https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/tagrens-foer.webp"
-              after="https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/tagrens-efter.webp"
-              label="Tagrens — betontag"
-            />
-          </AnimateOnScroll>
+          {sliders.map((s, i) => (
+            <AnimateOnScroll key={i} animation="fade-up" delay={i * 100}>
+              <BeforeAfterSlider
+                before={s.before}
+                after={s.after}
+                label={s.label}
+                factBadge={s.factBadge}
+              />
+            </AnimateOnScroll>
+          ))}
         </div>
       </div>
     </section>
@@ -698,7 +847,6 @@ export default function HomePageContent() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <HeroSection />
-      <TrustBar />
       <ServicesSection />
       <BeforeAfterShowcase />
       <SEOIntroSection />

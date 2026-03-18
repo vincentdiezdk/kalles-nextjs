@@ -6,9 +6,10 @@ export interface BeforeAfterProps {
   before: string;
   after: string;
   label?: string;
+  factBadge?: string;
 }
 
-export function BeforeAfterSlider({ before, after, label }: BeforeAfterProps) {
+export function BeforeAfterSlider({ before, after, label, factBadge }: BeforeAfterProps) {
   const [sliderPos, setSliderPos] = useState(50);
   const [showHint, setShowHint] = useState(true);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -173,7 +174,16 @@ export function BeforeAfterSlider({ before, after, label }: BeforeAfterProps) {
         <div className="absolute top-3 left-3 bg-black/60 text-white text-xs font-bold px-2.5 py-1 rounded-md">FØR</div>
         <div className="absolute top-3 right-3 bg-primary/90 text-white text-xs font-bold px-2.5 py-1 rounded-md">EFTER</div>
       </div>
-      {label && <p className="text-sm text-muted-foreground text-center">{label}</p>}
+      {(label || factBadge) && (
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-1">
+          {label && <p className="text-sm text-muted-foreground">{label}</p>}
+          {factBadge && (
+            <span className="text-xs font-medium text-primary bg-primary/10 px-2.5 py-0.5 rounded-full">
+              {factBadge}
+            </span>
+          )}
+        </div>
+      )}
     </div>
   );
 }

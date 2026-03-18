@@ -55,6 +55,7 @@ export default function Footer() {
                 { label: "Galleri", href: "/galleri" },
                 { label: "Service Områder", href: "/service-omraader" },
                 { label: "Blog", href: "/blog" },
+                { label: "Cookiepolitik", href: "/cookiepolitik" },
               ].map((link) => (
                 <li key={link.href}>
                   <Link

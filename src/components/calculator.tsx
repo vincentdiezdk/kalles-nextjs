@@ -193,6 +193,7 @@ export default function Calculator({ initialService, heading, subheading }: Calc
   const [price, setPrice] = useState<number | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [gdprConsent, setGdprConsent] = useState(false);
 
   // Tag-specific state
   const [tagType, setTagType] = useState<TagType | null>(null);
@@ -226,7 +227,7 @@ export default function Calculator({ initialService, heading, subheading }: Calc
       if (isTag) return tagArea > 0; // tagType is optional
       return true;
     }
-    if (step === 3) return name.trim() !== "" && phone.trim() !== "";
+    if (step === 3) return name.trim() !== "" && phone.trim() !== "" && gdprConsent;
     return false;
   };
 
@@ -322,6 +323,7 @@ export default function Calculator({ initialService, heading, subheading }: Calc
     setPostNr("");
     setShowMeasurementTool(false);
     setAreaFromTool(false);
+    setGdprConsent(false);
     setPrice(null);
     setSubmitted(false);
   };
@@ -912,6 +914,23 @@ export default function Calculator({ initialService, heading, subheading }: Calc
                   />
                 </div>
               </div>
+
+              {/* GDPR samtykke-checkbox */}
+              <label className="flex items-start gap-3 cursor-pointer mt-2" data-testid="calc-gdpr-consent">
+                <input
+                  type="checkbox"
+                  checked={gdprConsent}
+                  onChange={(e) => setGdprConsent(e.target.checked)}
+                  className="mt-0.5 h-4 w-4 rounded border-border text-primary focus:ring-primary shrink-0"
+                />
+                <span className="text-xs text-muted-foreground leading-relaxed">
+                  Jeg accepterer at Kalles Algerens kontakter mig vedr. mit tilbud.
+                  Læs vores{" "}
+                  <a href="/privatlivspolitik" target="_blank" rel="noopener noreferrer" className="text-primary underline hover:text-primary/80">
+                    privatlivspolitik
+                  </a>.
+                </span>
+              </label>
             </div>
           )}
 
