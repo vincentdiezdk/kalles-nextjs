@@ -7,6 +7,7 @@ const categories = [
   { key: "alle", label: "Alle" },
   { key: "fliser", label: "Fliser" },
   { key: "tag", label: "Tag" },
+  { key: "tagmaling", label: "Tagmaling" },
   { key: "facade", label: "Facade" },
   { key: "terrasse", label: "Terrasse" },
   { key: "alge", label: "Algebehandling" },
@@ -26,6 +27,9 @@ const galleryItems = [
   { category: "terrasse", label: "Terrasse rens — halvvejs", image: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/terrasse-kaspermh-2.webp" },
   { category: "alge", label: "Tag med alger og mos", image: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/alge-kaspermh-1.webp" },
   { category: "alge", label: "Professionel algebehandling", image: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/alge-kaspermh-2.webp" },
+  { category: "tagmaling", label: "Tagmaling — før", image: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/tagmaling-foer.webp" },
+  { category: "tagmaling", label: "Tagmaling — efter", image: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/tagmaling-efter.webp" },
+  { category: "tagmaling", label: "Professionel tagmaling", image: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/tagmaling-hero.webp" },
   { category: "fliser", label: "Serviceaftale — før", image: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/serviceaftale-foer.webp" },
   { category: "fliser", label: "Serviceaftale — efter", image: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/serviceaftale-efter.webp" },
 ];

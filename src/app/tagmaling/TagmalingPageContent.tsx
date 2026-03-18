@@ -39,6 +39,15 @@ export default function TagmalingPageContent() {
         subtitle="Forlæng dit tags levetid og giv huset nyt liv"
         price="Kontakt os for pris"
         serviceKey="tag"
+        heroImage="https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/tagmaling-hero.webp"
+        beforeAfter={[
+          {
+            before: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/tagmaling-foer.webp",
+            after: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/tagmaling-efter.webp",
+            label: "Før og efter tagmaling",
+          },
+        ]}
+        headingBeforeAfter="Se forskellen – Før og efter tagmaling"
         headingBenefits="Fordele ved professionel tagmaling"
         headingProcess="Sådan foregår en tagmaling"
         headingFaq="Ofte stillede spørgsmål om tagmaling"
