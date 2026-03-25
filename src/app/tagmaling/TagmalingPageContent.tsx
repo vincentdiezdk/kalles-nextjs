@@ -38,7 +38,7 @@ export default function TagmalingPageContent() {
         title="Tagmaling – Professionel tagmaling"
         subtitle="Forlæng dit tags levetid og giv huset nyt liv"
         price="Kontakt os for pris"
-        serviceKey="tag"
+
         heroImage="https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/tagmaling-hero.webp"
         beforeAfter={[
           {

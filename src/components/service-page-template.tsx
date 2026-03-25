@@ -539,7 +539,7 @@ export function TagrensPageContent() {
         title="Tagrens & Tagmaling"
         subtitle="Professionel tagrens i Midtjylland"
         price="Fra 10.997 kr."
-        serviceKey="tag"
+
         heroImage="https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/services/tagrens.webp"
         headingBeforeAfter="Professionel tagrens & tagmaling"
         headingBenefits="Fordele ved professionel tagrens"
@@ -760,7 +760,7 @@ export function TerrassePageContent() {
       <ServicePage
         title="Træterrasse Rens"
         subtitle="Professionel terrasse-rens i Midtjylland"
-        price="Fra 40 kr./m² (min. 2.497 kr.)"
+        price="Fra 50 kr./m² (min. 2.500 kr.)"
         serviceKey="terrasse"
         heroImage="https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/services/terrasse.webp"
         headingBeforeAfter="Skånsom og effektiv træterrasse rens"
@@ -872,7 +872,7 @@ export function AlgebehandlingPageContent() {
         title="Algebehandling af Tag"
         subtitle="Miljøgodkendt algebehandling i Midtjylland"
         price="995 kr. (op til 200 m²)"
-        serviceKey="alge"
+        serviceKey="algeTag"
         heroImage="https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/services/algerens.webp"
         headingBeforeAfter="Algebehandling af tag & fliser"
         headingBenefits="Fordele ved algebehandling"

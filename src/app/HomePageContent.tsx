@@ -218,7 +218,7 @@ function ServicesSection() {
     {
       icon: TreePine,
       title: "Træterrasse Rens",
-      price: "fra 40 kr./m²",
+      price: "fra 50 kr./m²",
       desc: "Skånsom rensning af træterrasser med imprægnering som tilvalg.",
       href: "/traeterrasse-rens",
       image: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/services/terrasse.webp",
@@ -433,7 +433,7 @@ function ServiceDetailSections() {
         <div className="mb-12" id="terrasse-info">
           <h3 className="font-sans font-bold text-xl text-foreground mb-3 flex items-center gap-2">
             <TreePine className="h-5 w-5 text-primary" />
-            Træterrasse Rens — fra 40 kr./m²
+            Træterrasse Rens — fra 50 kr./m²
           </h3>
           <div className="text-muted-foreground leading-relaxed space-y-3 text-sm">
             <p>
@@ -442,7 +442,7 @@ function ServiceDetailSections() {
             <p>
               Efter rensningen tilbyder vi imprægnering, der beskytter træet mod fugt, UV-stråling og genvækst af alger. Vi renser alle typer{" "}
               <Link href="/traeterrasse-rens" className="text-primary hover:underline font-medium">træterrasser</Link>{" "}
-              — trykimprægneret, hårdttræ og composit. Prisen starter fra 40 kr./m² med minimum 2.497 kr.
+              — trykimprægneret, hårdttræ og composit. Prisen starter fra 50 kr./m² med minimum 2.500 kr.
             </p>
           </div>
           <div className="mt-4 flex flex-wrap gap-3">

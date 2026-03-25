@@ -9,7 +9,6 @@ import { Switch } from "@/components/ui/switch";
 import Link from "next/link";
 import {
   Droplets,
-  Home,
   Building2,
   TreePine,
   Sparkles,
@@ -24,13 +23,12 @@ import {
   Shovel,
   Receipt,
   BadgePercent,
-
 } from "lucide-react";
 
 // Lazy-load the area measurement tool (requires Leaflet = browser-only)
 const AreaMeasurementTool = lazy(() => import("@/components/area-measurement-tool"));
 
-type ServiceKey = "fliser" | "tag" | "facade" | "terrasse" | "alge";
+type ServiceKey = "fliser" | "terrasse" | "algeFliser" | "algeTag" | "facade";
 
 interface ServiceInfo {
   key: ServiceKey;
@@ -43,30 +41,28 @@ interface ServiceInfo {
 
 const serviceOptions: ServiceInfo[] = [
   { key: "fliser", label: "Fliserens", icon: Droplets, description: "Fliser, sten & belægning", hasCalculator: true, staticPrice: "" },
-  { key: "tag", label: "Tagrens", icon: Home, description: "Tag rens & maling", hasCalculator: false, staticPrice: "Fra 10.997 kr." },
+  { key: "terrasse", label: "Træterrasse", icon: TreePine, description: "Rens & imprægnering", hasCalculator: true, staticPrice: "" },
+  { key: "algeFliser", label: "Algebehandling fliser", icon: Sparkles, description: "Alge & mos — fliser", hasCalculator: true, staticPrice: "" },
+  { key: "algeTag", label: "Algebehandling tag", icon: Sparkles, description: "Alge & mos — tag", hasCalculator: true, staticPrice: "" },
   { key: "facade", label: "Facaderens", icon: Building2, description: "Mur, puds & beton", hasCalculator: false, staticPrice: "Minimum 2.997 kr." },
-  { key: "terrasse", label: "Terrasse", icon: TreePine, description: "Træterrasse rens", hasCalculator: false, staticPrice: "Fra 40 kr/m², min. 2.497 kr." },
-  { key: "alge", label: "Algebehandling", icon: Sparkles, description: "Alge & mos fjernelse", hasCalculator: false, staticPrice: "995 kr. (op til 200 m²)" },
 ];
 
-// ─── Pricing logic matching kaspermh.dk ─────────────
-// Fliserens: 30 kr/m² with minimum 75m² (= 2.250 kr flat for ≤75m²)
-// Above 75m²: 2.250 + (area - 75) × 30 kr/m²
-const FLISER_BASE = 2250;        // flat for ≤75m²
-const FLISER_THRESHOLD = 75;     // m²
-const FLISER_PER_M2 = 30;        // kr/m² above threshold
+// ─── Fliserens pricing ─────────────────────────────────
+// 30 kr/m² with minimum 75m² (= 2.250 kr flat for ≤75m²)
+const FLISER_BASE = 2250;
+const FLISER_THRESHOLD = 75;
+const FLISER_PER_M2 = 30;
 
-// Add-ons (each has a fixed fee for ≤75m² and per-m² above)
 interface Addon {
   key: string;
   label: string;
   description: string;
   icon: typeof ShieldCheck;
-  fixedFee: number;    // kr for ≤75m²
-  perM2: number;       // kr/m² above 75m²
+  fixedFee: number;
+  perM2: number;
 }
 
-const addons: Addon[] = [
+const fliserAddons: Addon[] = [
   {
     key: "nano",
     label: "Nano imprægnering",
@@ -93,19 +89,12 @@ const addons: Addon[] = [
   },
 ];
 
-
-
-function calculateFliserPrice(
-  area: number,
-  activeAddons: Record<string, boolean>
-): number {
-  // Base fliserens price
+function calculateFliserPrice(area: number, activeAddons: Record<string, boolean>): number {
   let total = area <= FLISER_THRESHOLD
     ? FLISER_BASE
     : FLISER_BASE + (area - FLISER_THRESHOLD) * FLISER_PER_M2;
 
-  // Add-ons
-  for (const addon of addons) {
+  for (const addon of fliserAddons) {
     if (!activeAddons[addon.key]) continue;
     if (area <= FLISER_THRESHOLD) {
       total += addon.fixedFee;
@@ -113,27 +102,151 @@ function calculateFliserPrice(
       total += addon.fixedFee + (area - FLISER_THRESHOLD) * addon.perM2;
     }
   }
-
   return total;
 }
 
-// Static prices for other services (used for display + lead)
+// ─── Træterrasse pricing ─────────────────────────────────
+// 50 kr/m² with minimum 50m² (= 2.500 kr flat for ≤50m²)
+const TERRASSE_BASE = 2500;
+const TERRASSE_THRESHOLD = 50;
+const TERRASSE_PER_M2 = 50;
+
+const terrasseAddons: Addon[] = [
+  {
+    key: "impraegnering",
+    label: "Imprægnering",
+    description: "Beskytter træet mod fugt og alger",
+    icon: ShieldCheck,
+    fixedFee: 500,   // 10 kr/m² × 50 m² = 500 for ≤50m²
+    perM2: 10,
+  },
+];
+
+function calculateTerrassePrice(area: number, activeAddons: Record<string, boolean>): number {
+  let total = area <= TERRASSE_THRESHOLD
+    ? TERRASSE_BASE
+    : TERRASSE_BASE + (area - TERRASSE_THRESHOLD) * TERRASSE_PER_M2;
+
+  for (const addon of terrasseAddons) {
+    if (!activeAddons[addon.key]) continue;
+    if (area <= TERRASSE_THRESHOLD) {
+      total += addon.fixedFee;
+    } else {
+      total += addon.fixedFee + (area - TERRASSE_THRESHOLD) * addon.perM2;
+    }
+  }
+  return total;
+}
+
+// ─── Algebehandling pricing (same for fliser & tag) ─────
+// 995 kr for ≤200m², +5 kr/m² above 200m², max 500m²
+const ALGE_BASE = 995;
+const ALGE_THRESHOLD = 200;
+const ALGE_PER_M2 = 5;
+
+function calculateAlgePrice(area: number): number {
+  return area <= ALGE_THRESHOLD
+    ? ALGE_BASE
+    : ALGE_BASE + (area - ALGE_THRESHOLD) * ALGE_PER_M2;
+}
+
+// ─── Service config helper ──────────────────────────────
+interface ServiceCalcConfig {
+  areaLabel: string;
+  measureLabel: string;
+  sliderMin: number;
+  sliderMax: number;
+  sliderStep: number;
+  defaultArea: number;
+  addons: Addon[];
+  threshold: number;
+  calculatePrice: (area: number, addons: Record<string, boolean>) => number;
+  serviceFradrag: boolean; // fliserens & terrasse qualify, alge & tag don't
+  resultLabel: (area: number, addons: Record<string, boolean>) => string;
+}
+
+function getServiceConfig(service: ServiceKey): ServiceCalcConfig | null {
+  switch (service) {
+    case "fliser":
+      return {
+        areaLabel: "Fliserens areal",
+        measureLabel: "Opmål på luftfoto",
+        sliderMin: 30,
+        sliderMax: 500,
+        sliderStep: 1,
+        defaultArea: 75,
+        addons: fliserAddons,
+        threshold: FLISER_THRESHOLD,
+        calculatePrice: calculateFliserPrice,
+        serviceFradrag: true,
+        resultLabel: (area, addons) => {
+          const addonNames = Object.entries(addons).filter(([, v]) => v).map(([k]) =>
+            fliserAddons.find(a => a.key === k)?.label
+          ).filter(Boolean);
+          return `${area} m² fliserens${addonNames.length > 0 ? ` inkl. ${addonNames.join(", ")}` : ""}`;
+        },
+      };
+    case "terrasse":
+      return {
+        areaLabel: "Terrasse areal",
+        measureLabel: "Opmål på luftfoto",
+        sliderMin: 10,
+        sliderMax: 300,
+        sliderStep: 1,
+        defaultArea: 50,
+        addons: terrasseAddons,
+        threshold: TERRASSE_THRESHOLD,
+        calculatePrice: calculateTerrassePrice,
+        serviceFradrag: true,
+        resultLabel: (area, addons) => {
+          const hasImpraeg = addons["impraegnering"];
+          return `${area} m² træterrasse rens${hasImpraeg ? " inkl. imprægnering" : ""}`;
+        },
+      };
+    case "algeFliser":
+      return {
+        areaLabel: "Flise-areal til algebehandling",
+        measureLabel: "Opmål på luftfoto",
+        sliderMin: 50,
+        sliderMax: 500,
+        sliderStep: 5,
+        defaultArea: 150,
+        addons: [],
+        threshold: ALGE_THRESHOLD,
+        calculatePrice: (area) => calculateAlgePrice(area),
+        serviceFradrag: false,
+        resultLabel: (area) => `${area} m² algebehandling — fliser`,
+      };
+    case "algeTag":
+      return {
+        areaLabel: "Tag-areal til algebehandling",
+        measureLabel: "Opmål tag på luftfoto",
+        sliderMin: 50,
+        sliderMax: 500,
+        sliderStep: 5,
+        defaultArea: 150,
+        addons: [],
+        threshold: ALGE_THRESHOLD,
+        calculatePrice: (area) => calculateAlgePrice(area),
+        serviceFradrag: false,
+        resultLabel: (area) => `${area} m² algebehandling — tag`,
+      };
+    default:
+      return null;
+  }
+}
+
+// Static prices for non-calculator services
 function getStaticEstimate(service: ServiceKey, area: number): number {
   switch (service) {
-    case "tag": return 10997;
     case "facade": return Math.max(2997, area * 40);
-    case "terrasse": return Math.max(2497, area * 40);
-    case "alge": return area <= 200 ? 995 : 995 + (area - 200) * 5;
     default: return 0;
   }
 }
 
 interface CalculatorProps {
-  /** Pre-select a service and skip step 1 */
   initialService?: ServiceKey;
-  /** Custom heading — useful when embedded on a service page */
   heading?: string;
-  /** Custom subheading */
   subheading?: string;
 }
 
@@ -143,7 +256,11 @@ export default function Calculator({ initialService, heading, subheading }: Calc
   const hasInitialService = !!initialService;
   const [step, setStep] = useState(hasInitialService ? (serviceOptions.find(s => s.key === initialService)?.hasCalculator ? 2 : 3) : 1);
   const [service, setService] = useState<ServiceKey | null>(initialService ?? null);
-  const [area, setArea] = useState<number>(75);
+
+  // Area — initialized per service in handleNext or via default
+  const initConfig = initialService ? getServiceConfig(initialService) : null;
+  const [area, setArea] = useState<number>(initConfig?.defaultArea ?? 75);
+
   const [activeAddons, setActiveAddons] = useState<Record<string, boolean>>({});
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -157,43 +274,46 @@ export default function Calculator({ initialService, heading, subheading }: Calc
   const [submitted, setSubmitted] = useState(false);
   const [gdprConsent, setGdprConsent] = useState(false);
 
-
-
-  const isFliser = service === "fliser";
   const hasCalculator = serviceOptions.find(s => s.key === service)?.hasCalculator ?? false;
+  const config = service ? getServiceConfig(service) : null;
 
-  // Live price calculation for fliserens
-  const livePrice = isFliser ? calculateFliserPrice(area, activeAddons) : null;
+  // Live price calculation for all calculator services
+  const livePrice = config ? config.calculatePrice(area, activeAddons) : null;
 
   // Moms (25% dansk moms, included in price)
-  const momsAmount = livePrice !== null ? Math.round(livePrice * 0.2) : null; // moms = pris × 25/125
+  const momsAmount = livePrice !== null ? Math.round(livePrice * 0.2) : null;
   const priceExMoms = livePrice !== null && momsAmount !== null ? livePrice - momsAmount : null;
 
-  // Servicefradrag 2026: op til 18.300 kr/person, skatteværdi ~26%
-  // Fliserens er dækket under "Fliserensning af terrasser, indkørsler m.v."
+  // Servicefradrag 2026
   const SERVICE_FRADRAG_MAX = 18300;
   const FRADRAG_SKAT_PCTG = 0.26;
-  const LABOR_SHARE = 0.75; // 75% mandetimer, 25% materialer
-  // Kun arbejdsløn (75% af pris ex moms) er fradragsberettiget
-  const laborCost = priceExMoms !== null ? Math.round(priceExMoms * LABOR_SHARE) : null;
+  const LABOR_SHARE = 0.75;
+  const showFradrag = config?.serviceFradrag ?? false;
+  const laborCost = showFradrag && priceExMoms !== null ? Math.round(priceExMoms * LABOR_SHARE) : null;
   const fradragBase = laborCost !== null ? Math.min(laborCost, SERVICE_FRADRAG_MAX) : null;
   const skattebesparelse = fradragBase !== null ? Math.round(fradragBase * FRADRAG_SKAT_PCTG) : null;
   const effectivePrice = livePrice !== null && skattebesparelse !== null ? livePrice - skattebesparelse : null;
 
   const canNext = () => {
     if (step === 1) return !!service;
-    if (step === 2) {
-      if (isFliser) return area > 0;
-      return true;
-    }
+    if (step === 2) return area > 0;
     if (step === 3) return name.trim() !== "" && phone.trim() !== "" && gdprConsent;
     return false;
   };
 
   const handleNext = () => {
-    if (step === 1 && service && !hasCalculator) {
-      // Non-calculator services skip to step 3 (contact)
-      setStep(3);
+    if (step === 1) {
+      // When selecting a service in step 1, set default area for that service
+      const svcConfig = service ? getServiceConfig(service) : null;
+      if (svcConfig) {
+        setArea(svcConfig.defaultArea);
+      }
+
+      if (service && !hasCalculator) {
+        setStep(3);
+      } else {
+        setStep(2);
+      }
     } else if (step < 3) {
       setStep(step + 1);
     } else {
@@ -202,13 +322,10 @@ export default function Calculator({ initialService, heading, subheading }: Calc
   };
 
   const handleBack = () => {
-    if (hasInitialService && step === 2) {
-      // Can't go back past the pre-selected service
-      return;
-    }
+    if (hasInitialService && step === 2) return;
     if (step === 3 && service && !hasCalculator) {
-      if (hasInitialService) return; // Can't go back past pre-selected
-      setStep(1); // Skip back over step 2 for non-calculator services
+      if (hasInitialService) return;
+      setStep(1);
     } else {
       setStep(step - 1);
     }
@@ -216,15 +333,16 @@ export default function Calculator({ initialService, heading, subheading }: Calc
 
   const handleSubmit = async () => {
     if (!service || !name.trim() || !phone.trim()) return;
-    const estimated = isFliser
-      ? calculateFliserPrice(area || 75, activeAddons)
+
+    const estimated = config
+      ? config.calculatePrice(area, activeAddons)
       : getStaticEstimate(service, area || 50);
     setPrice(estimated);
     setSubmitting(true);
 
-    // Build condition string based on service
+    // Build condition string
     let condition: string | null = null;
-    if (isFliser) {
+    if (config && config.addons.length > 0) {
       condition = Object.entries(activeAddons).filter(([, v]) => v).map(([k]) => k).join(",") || "ingen tilvalg";
     }
 
@@ -234,7 +352,7 @@ export default function Calculator({ initialService, heading, subheading }: Calc
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           service,
-          areaM2: isFliser ? (area || null) : null,
+          areaM2: hasCalculator ? (area || null) : null,
           condition,
           estimatedPrice: estimated,
           name: name.trim(),
@@ -257,11 +375,13 @@ export default function Calculator({ initialService, heading, subheading }: Calc
       const svc = serviceOptions.find(s => s.key === initialService);
       setStep(svc?.hasCalculator ? 2 : 3);
       setService(initialService!);
+      const svcConfig = initialService ? getServiceConfig(initialService) : null;
+      setArea(svcConfig?.defaultArea ?? 75);
     } else {
       setStep(1);
       setService(null);
+      setArea(75);
     }
-    setArea(75);
     setActiveAddons({});
     setName("");
     setPhone("");
@@ -382,8 +502,8 @@ export default function Calculator({ initialService, heading, subheading }: Calc
             </div>
           )}
 
-          {/* Step 2: Area + Add-ons (only for fliserens) */}
-          {step === 2 && isFliser && (
+          {/* Step 2: Area + Add-ons (for all calculator services) */}
+          {step === 2 && config && (
             <div className="space-y-6" data-testid="calc-step-2">
               <h3 className="font-sans font-bold text-lg text-foreground mb-4">
                 {hasInitialService ? "1" : "2"}. Areal & tilvalg
@@ -392,16 +512,16 @@ export default function Calculator({ initialService, heading, subheading }: Calc
               {/* Area slider */}
               <div>
                 <div className="flex items-center justify-between mb-3">
-                  <Label className="text-sm font-medium">Fliserens areal</Label>
+                  <Label className="text-sm font-medium">{config.areaLabel}</Label>
                   <div className="flex items-center gap-2">
                     <Input
                       type="number"
-                      min={30}
-                      max={500}
+                      min={config.sliderMin}
+                      max={config.sliderMax}
                       value={area}
                       onChange={(e) => {
-                        const v = parseInt(e.target.value) || 30;
-                        setArea(Math.min(500, Math.max(30, v)));
+                        const v = parseInt(e.target.value) || config.sliderMin;
+                        setArea(Math.min(config.sliderMax, Math.max(config.sliderMin, v)));
                         setAreaFromTool(false);
                       }}
                       className="w-20 h-8 text-center text-sm font-semibold"
@@ -416,15 +536,15 @@ export default function Calculator({ initialService, heading, subheading }: Calc
                     setArea(v);
                     setAreaFromTool(false);
                   }}
-                  min={30}
-                  max={500}
-                  step={1}
+                  min={config.sliderMin}
+                  max={config.sliderMax}
+                  step={config.sliderStep}
                   className="w-full"
                   data-testid="calc-area-slider"
                 />
                 <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                  <span>30 m²</span>
-                  <span>500 m²</span>
+                  <span>{config.sliderMin} m²</span>
+                  <span>{config.sliderMax} m²</span>
                 </div>
                 {areaFromTool && area > 0 && (
                   <p className="text-xs text-primary font-medium mt-1.5 flex items-center gap-1">
@@ -445,7 +565,7 @@ export default function Calculator({ initialService, heading, subheading }: Calc
                   data-testid="calc-open-measurement"
                 >
                   <Ruler className="h-3.5 w-3.5" />
-                  Opmål på luftfoto
+                  {config.measureLabel}
                 </Button>
               )}
 
@@ -461,7 +581,7 @@ export default function Calculator({ initialService, heading, subheading }: Calc
                     <AreaMeasurementTool
                       initialAddress={address}
                       onAreaConfirmed={(m2) => {
-                        setArea(Math.min(500, Math.max(30, m2)));
+                        setArea(Math.min(config.sliderMax, Math.max(config.sliderMin, m2)));
                         setAreaFromTool(true);
                         setShowMeasurementTool(false);
                       }}
@@ -470,55 +590,57 @@ export default function Calculator({ initialService, heading, subheading }: Calc
                 </div>
               )}
 
-              {/* Add-ons */}
-              <div>
-                <Label className="text-sm font-medium mb-3 block">Tilvalg</Label>
-                <div className="space-y-3">
-                  {addons.map((addon) => {
-                    const Icon = addon.icon;
-                    const active = !!activeAddons[addon.key];
-                    const addonPrice = area <= FLISER_THRESHOLD
-                      ? addon.fixedFee
-                      : addon.fixedFee + (area - FLISER_THRESHOLD) * addon.perM2;
-                    return (
-                      <div
-                        key={addon.key}
-                        className={`flex items-center justify-between p-4 rounded-xl border-2 transition-all cursor-pointer ${
-                          active
-                            ? "border-primary bg-primary/5"
-                            : "border-border hover:border-primary/20"
-                        }`}
-                        onClick={() => toggleAddon(addon.key)}
-                        data-testid={`calc-addon-${addon.key}`}
-                      >
-                        <div className="flex items-center gap-3">
-                          <Icon className={`h-5 w-5 shrink-0 ${active ? "text-primary" : "text-muted-foreground"}`} />
-                          <div>
-                            <div className="font-sans font-semibold text-sm text-foreground">
-                              {addon.label}
+              {/* Add-ons (if any) */}
+              {config.addons.length > 0 && (
+                <div>
+                  <Label className="text-sm font-medium mb-3 block">Tilvalg</Label>
+                  <div className="space-y-3">
+                    {config.addons.map((addon) => {
+                      const Icon = addon.icon;
+                      const active = !!activeAddons[addon.key];
+                      const addonPrice = area <= config.threshold
+                        ? addon.fixedFee
+                        : addon.fixedFee + (area - config.threshold) * addon.perM2;
+                      return (
+                        <div
+                          key={addon.key}
+                          className={`flex items-center justify-between p-4 rounded-xl border-2 transition-all cursor-pointer ${
+                            active
+                              ? "border-primary bg-primary/5"
+                              : "border-border hover:border-primary/20"
+                          }`}
+                          onClick={() => toggleAddon(addon.key)}
+                          data-testid={`calc-addon-${addon.key}`}
+                        >
+                          <div className="flex items-center gap-3">
+                            <Icon className={`h-5 w-5 shrink-0 ${active ? "text-primary" : "text-muted-foreground"}`} />
+                            <div>
+                              <div className="font-sans font-semibold text-sm text-foreground">
+                                {addon.label}
+                              </div>
+                              <div className="text-xs text-muted-foreground">
+                                {addon.description}
+                              </div>
                             </div>
-                            <div className="text-xs text-muted-foreground">
-                              {addon.description}
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <span className="text-sm font-semibold text-foreground whitespace-nowrap">
+                              + {addonPrice.toLocaleString("da-DK")} kr.
+                            </span>
+                            <div onClick={(e) => e.stopPropagation()}>
+                              <Switch
+                                checked={active}
+                                onCheckedChange={() => toggleAddon(addon.key)}
+                                aria-label={addon.label}
+                              />
                             </div>
                           </div>
                         </div>
-                        <div className="flex items-center gap-3">
-                          <span className="text-sm font-semibold text-foreground whitespace-nowrap">
-                            + {addonPrice.toLocaleString("da-DK")} kr.
-                          </span>
-                          <div onClick={(e) => e.stopPropagation()}>
-                            <Switch
-                              checked={active}
-                              onCheckedChange={() => toggleAddon(addon.key)}
-                              aria-label={addon.label}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* Live price display */}
               {livePrice !== null && (
@@ -528,7 +650,7 @@ export default function Calculator({ initialService, heading, subheading }: Calc
                     kr {livePrice.toLocaleString("da-DK")}
                   </div>
                   <p className="text-xs text-muted-foreground mt-1">
-                    {area} m² fliserens{Object.values(activeAddons).some(v => v) ? " inkl. tilvalg" : ""}
+                    {config.resultLabel(area, activeAddons)}
                   </p>
 
                   {/* Moms breakdown */}
@@ -541,8 +663,8 @@ export default function Calculator({ initialService, heading, subheading }: Calc
                     </div>
                   )}
 
-                  {/* Servicefradrag */}
-                  {skattebesparelse !== null && skattebesparelse > 0 && effectivePrice !== null && (
+                  {/* Servicefradrag (only for qualifying services) */}
+                  {showFradrag && skattebesparelse !== null && skattebesparelse > 0 && effectivePrice !== null && (
                     <div className="mt-3 pt-3 border-t border-primary/10">
                       <div className="flex items-center justify-center gap-1.5 text-xs font-medium text-emerald-700 dark:text-emerald-400">
                         <BadgePercent className="h-3.5 w-3.5" />
@@ -563,8 +685,6 @@ export default function Calculator({ initialService, heading, subheading }: Calc
             </div>
           )}
 
-
-
           {/* Step 3: Contact */}
           {step === 3 && (
             <div className="space-y-4" data-testid="calc-step-3">
@@ -575,12 +695,11 @@ export default function Calculator({ initialService, heading, subheading }: Calc
                 }. Dine oplysninger
               </h3>
 
-              {/* Show selected service + price summary for fliserens */}
-              {isFliser && livePrice !== null && (
+              {/* Show selected service + price summary for calculator services */}
+              {hasCalculator && livePrice !== null && config && (
                 <div className="bg-primary/5 border border-primary/20 rounded-lg p-3 mb-4 flex items-center justify-between">
                   <span className="text-sm text-foreground font-medium">
-                    Fliserens — {area} m²
-                    {Object.values(activeAddons).some(v => v) ? " + tilvalg" : ""}
+                    {config.resultLabel(area, activeAddons)}
                   </span>
                   <span className="text-sm font-bold text-primary">
                     kr {livePrice.toLocaleString("da-DK")}
@@ -589,7 +708,7 @@ export default function Calculator({ initialService, heading, subheading }: Calc
               )}
 
               {/* Show selected service for non-calculator */}
-              {!isFliser && service && (
+              {!hasCalculator && service && (
                 <div className="bg-primary/5 border border-primary/20 rounded-lg p-3 mb-4">
                   <span className="text-sm text-foreground font-medium">
                     {serviceOptions.find(s => s.key === service)?.label} — {serviceOptions.find(s => s.key === service)?.staticPrice}
@@ -693,26 +812,22 @@ export default function Calculator({ initialService, heading, subheading }: Calc
             <div className="text-center py-4" data-testid="calc-result">
               <CheckCircle2 className="h-12 w-12 text-primary mx-auto mb-4" />
               <h3 className="font-sans font-bold text-lg text-foreground mb-2">
-                {isFliser ? "Din vejledende pris" : "Tak for din henvendelse"}
+                {hasCalculator ? "Din vejledende pris" : "Tak for din henvendelse"}
               </h3>
-              {isFliser ? (
+              {hasCalculator && config ? (
                 <>
                   <div className="text-4xl md:text-5xl font-sans font-extrabold text-primary mb-2">
                     kr {price.toLocaleString("da-DK")}
                   </div>
                   <p className="text-sm text-muted-foreground mb-1">
-                    {area} m² fliserens
-                    {Object.entries(activeAddons).filter(([, v]) => v).length > 0 && (
-                      <> inkl. {Object.entries(activeAddons).filter(([, v]) => v).map(([k]) =>
-                        addons.find(a => a.key === k)?.label
-                      ).join(", ")}</>
-                    )}
+                    {config.resultLabel(area, activeAddons)}
                   </p>
                   {/* Moms + fradrag in result */}
                   {(() => {
                     const resMoms = Math.round(price * 0.2);
                     const resExMoms = price - resMoms;
-                    const resLaborCost = Math.round(resExMoms * 0.75); // 75% mandetimer
+                    const showResFradrag = config.serviceFradrag;
+                    const resLaborCost = showResFradrag ? Math.round(resExMoms * 0.75) : 0;
                     const resFradrag = Math.min(resLaborCost, 18300);
                     const resSkat = Math.round(resFradrag * 0.26);
                     return (
@@ -721,16 +836,20 @@ export default function Calculator({ initialService, heading, subheading }: Calc
                           <Receipt className="h-3 w-3" />
                           Heraf moms: {resMoms.toLocaleString("da-DK")} kr.
                         </p>
-                        <div className="flex items-center justify-center gap-1 text-xs font-medium text-emerald-700 dark:text-emerald-400">
-                          <BadgePercent className="h-3.5 w-3.5" />
-                          <span>Servicefradrag: Spar {resSkat.toLocaleString("da-DK")} kr. i skat</span>
-                        </div>
-                        <p className="text-xs text-muted-foreground">
-                          Reel pris efter fradrag: <span className="font-semibold text-foreground">kr {(price - resSkat).toLocaleString("da-DK")}</span>
-                        </p>
-                        <Link href="/servicefradrag" className="text-[10px] text-primary underline hover:text-primary/80 transition-colors">
-                          Læs mere om servicefradrag →
-                        </Link>
+                        {showResFradrag && resSkat > 0 && (
+                          <>
+                            <div className="flex items-center justify-center gap-1 text-xs font-medium text-emerald-700 dark:text-emerald-400">
+                              <BadgePercent className="h-3.5 w-3.5" />
+                              <span>Servicefradrag: Spar {resSkat.toLocaleString("da-DK")} kr. i skat</span>
+                            </div>
+                            <p className="text-xs text-muted-foreground">
+                              Reel pris efter fradrag: <span className="font-semibold text-foreground">kr {(price - resSkat).toLocaleString("da-DK")}</span>
+                            </p>
+                            <Link href="/servicefradrag" className="text-[10px] text-primary underline hover:text-primary/80 transition-colors">
+                              Læs mere om servicefradrag →
+                            </Link>
+                          </>
+                        )}
                       </div>
                     );
                   })()}
@@ -793,7 +912,7 @@ export default function Calculator({ initialService, heading, subheading }: Calc
                 {submitting
                   ? "Sender..."
                   : step === 3
-                  ? (isFliser ? "Se din pris" : "Få tilbud")
+                  ? (hasCalculator ? "Se din pris" : "Få tilbud")
                   : "Næste"}
                 {!submitting && <ArrowRight className="h-4 w-4" />}
               </Button>
