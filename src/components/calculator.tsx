@@ -111,16 +111,7 @@ const TERRASSE_BASE = 2500;
 const TERRASSE_THRESHOLD = 50;
 const TERRASSE_PER_M2 = 50;
 
-const terrasseAddons: Addon[] = [
-  {
-    key: "impraegnering",
-    label: "Imprægnering",
-    description: "Beskytter træet mod fugt og alger",
-    icon: ShieldCheck,
-    fixedFee: 500,   // 10 kr/m² × 50 m² = 500 for ≤50m²
-    perM2: 10,
-  },
-];
+const terrasseAddons: Addon[] = [];
 
 function calculateTerrassePrice(area: number, activeAddons: Record<string, boolean>): number {
   let total = area <= TERRASSE_THRESHOLD
