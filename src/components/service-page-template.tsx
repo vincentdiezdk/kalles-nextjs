@@ -546,9 +546,7 @@ export function TagrensPageContent() {
         headingProcess="Hvad koster tagrens?"
         headingFaq="Ofte stillede spørgsmål om tagrens"
         headingCta="Klar til at få dit tag renset?"
-        beforeAfter={[
-          { before: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/tagrens-foer.webp", after: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/tagrens-efter.webp", label: "Tagrens — betontagsten" },
-        ]}
+
         warning="Vi renser IKKE asbest-tag. Kontakt en certificeret specialist for asbest-opgaver."
         description={[
           "Et rent tag er ikke bare pænere — det forlænger også tagets levetid markant. Alger, mos og lav kan trænge ned i tagsten og skabe fugt- og frostskader over tid.",
@@ -663,10 +661,7 @@ export function FacaderensPageContent() {
         headingProcess="Sådan foregår en facaderens"
         headingFaq="Ofte stillede spørgsmål om facaderens"
         headingCta="Klar til at få din facade renset?"
-        extraImages={[
-          { src: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/facaderens-ba.webp", alt: "Facaderens før og efter" },
-          { src: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/facaderens-kaspermh.webp", alt: "Professionel facaderens" },
-        ]}
+
         description={[
           "En ren facade giver dit hjem et markant løft og beskytter murværket mod nedbrydning. Alger, mos og snavs binder fugt, som over tid kan skade mursten, puds og fuger.",
           "Vi tilpasser altid vores metode til facadens materiale — om det er mursten, puds, beton eller træ. Varmt vand og skånsomt tryk sikrer effektiv rensning uden at beskadige overfladen.",
@@ -769,9 +764,8 @@ export function TerrassePageContent() {
         headingFaq="Ofte stillede spørgsmål om terrasse-rens"
         headingCta="Klar til at få din terrasse renset?"
         extraImages={[
-          { src: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/terrasse-foer.webp", alt: "Terrasse rens — halvvejs resultat" },
-          { src: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/terrasse-kaspermh-1.webp", alt: "Træterrasse før rens" },
-          { src: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/terrasse-kaspermh-2.webp", alt: "Terrasse rens — halvvejs" },
+          { src: "/images/before-after/terrasse-foer.webp", alt: "Træterrasse før rens" },
+          { src: "/images/before-after/terrasse-efter.webp", alt: "Træterrasse efter rens" },
         ]}
         description={[
           "Din træterrasse er udsat for vejr, vind, alger og snavs året rundt. Med professionel rensning fjerner vi det hele og giver dit træ nyt liv — skånsomt og effektivt.",
@@ -879,10 +873,7 @@ export function AlgebehandlingPageContent() {
         headingProcess="Pris på algebehandling af tag"
         headingFaq="Ofte stillede spørgsmål om algebehandling af tag"
         headingCta="Klar til algebehandling?"
-        extraImages={[
-          { src: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/alge-kaspermh-1.webp", alt: "Tag med alger og mos — før algebehandling" },
-          { src: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/alge-kaspermh-2.webp", alt: "Professionel algebehandling" },
-        ]}
+
         description={[
           "Algebehandling er den mest effektive forebyggende behandling mod alger, mos og lav på dit tag, dine fliser eller din facade. Vi bruger Neutralon — et miljøgodkendt produkt godkendt af Miljøstyrelsen.",
           "Neutralon arbejder over tid og fjerner langsomt alger og mos uden at skade overfladen. Resultatet ses typisk efter 3-6 måneder, hvor grønne belægninger gradvist forsvinder.",

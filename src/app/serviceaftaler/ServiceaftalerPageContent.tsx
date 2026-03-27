@@ -182,9 +182,9 @@ export default function ServiceaftalerPageContent() {
           </h2>
           <div className="max-w-xl mx-auto">
             <BeforeAfterSlider
-              before="https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/serviceaftale-foer.webp"
-              after="https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/serviceaftale-efter.webp"
-              label="Resultat af årlig algebehandling med serviceaftale"
+              before="/images/before-after/flise-2-foer.webp"
+              after="/images/before-after/flise-2-efter.webp"
+              label="Fliserens — før og efter med serviceaftale"
             />
           </div>
         </div>
