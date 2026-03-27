@@ -19,30 +19,18 @@ import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useCampaignBannerVisible } from "@/components/campaign-banner";
 
+const LOGO_URL = "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/logo-kalles-algerens.png";
+
 function KalleLogo({ className = "h-10 w-10" }: { className?: string }) {
   return (
-    <svg
-      viewBox="0 0 48 48"
-      fill="none"
-      className={className}
-      aria-label="Kalles Algerens logo"
-    >
-      <rect x="2" y="2" width="44" height="44" rx="12" fill="hsl(var(--primary))" />
-      <text
-        x="24"
-        y="34"
-        textAnchor="middle"
-        fill="white"
-        fontFamily="'Cabinet Grotesk', sans-serif"
-        fontWeight="800"
-        fontSize="28"
-      >
-        K
-      </text>
-      <circle cx="38" cy="10" r="3" fill="hsl(121 45% 55%)" opacity="0.7" />
-      <circle cx="34" cy="6" r="2" fill="hsl(121 45% 60%)" opacity="0.5" />
-      <circle cx="42" cy="14" r="1.5" fill="hsl(121 45% 65%)" opacity="0.4" />
-    </svg>
+    <div className={`${className} rounded-lg bg-primary flex items-center justify-center overflow-hidden p-1`}>
+      <img
+        src={LOGO_URL}
+        alt="Kalles Algerens logo"
+        className="w-full h-full object-contain"
+        loading="eager"
+      />
+    </div>
   );
 }
 
@@ -173,7 +161,7 @@ export default function Header() {
                 Kalles Algerens
               </span>
               <span className="font-sans text-[10px] text-muted-foreground leading-tight hidden sm:block">
-                Professionel udendørs rengøring
+                Alger og skidt? Så er Kalle dit hit
               </span>
             </div>
           </Link>
