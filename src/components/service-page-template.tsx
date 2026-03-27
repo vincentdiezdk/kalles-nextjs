@@ -763,9 +763,8 @@ export function TerrassePageContent() {
         headingProcess="Hvad koster rens af træterrasse?"
         headingFaq="Ofte stillede spørgsmål om terrasse-rens"
         headingCta="Klar til at få din terrasse renset?"
-        extraImages={[
-          { src: "/images/before-after/terrasse-foer.webp", alt: "Træterrasse før rens" },
-          { src: "/images/before-after/terrasse-efter.webp", alt: "Træterrasse efter rens" },
+        beforeAfter={[
+          { before: "/images/before-after/terrasse-foer.webp", after: "/images/before-after/terrasse-efter.webp", label: "Træterrasse — før og efter rens" },
         ]}
         description={[
           "Din træterrasse er udsat for vejr, vind, alger og snavs året rundt. Med professionel rensning fjerner vi det hele og giver dit træ nyt liv — skånsomt og effektivt.",

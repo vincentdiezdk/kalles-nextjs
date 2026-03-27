@@ -220,15 +220,19 @@ export default function Calculator({ initialService, heading, subheading }: Calc
   const skattebesparelse = fradragBase !== null ? Math.round(fradragBase * FRADRAG_SKAT_PCTG) : null;
   const effectivePrice = livePrice !== null && skattebesparelse !== null ? livePrice - skattebesparelse : null;
 
-  // Scroll to top of calculator on step change
+  // Track if user has interacted (to avoid scroll on initial page load)
+  const hasInteracted = useRef(false);
+
+  // Scroll to top of calculator on step change — but only after user interaction
   useEffect(() => {
-    if (step > 1) {
+    if (hasInteracted.current && step > 1) {
       sectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   }, [step]);
 
   // ─── Auto-advance: click service → go to next step ────
   const selectService = (key: ServiceKey) => {
+    hasInteracted.current = true;
     setService(key);
     const svcConfig = getServiceConfig(key);
     const svcHasCalc = serviceOptions.find(s => s.key === key)?.hasCalculator ?? false;
@@ -255,6 +259,7 @@ export default function Calculator({ initialService, heading, subheading }: Calc
   };
 
   const handleNext = () => {
+    hasInteracted.current = true;
     if (step === 2) {
       setStep(3);
     } else if (step === 3) {
