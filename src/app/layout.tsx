@@ -7,7 +7,6 @@ import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 import CampaignBanner from "@/components/campaign-banner";
 import TrackingPixels from "@/components/tracking-pixels";
-import WhatsAppWidget from "@/components/whatsapp-widget";
 import ExitPopup from "@/components/exit-popup";
 import MobileCTA from "@/components/mobile-cta";
 import StickyCalculatorBar from "@/components/sticky-calculator-bar";
@@ -92,7 +91,6 @@ export default function RootLayout({
             {children}
           </main>
           <Footer />
-          <WhatsAppWidget />
           <SocialProofToast />
           <ExitPopup />
           <MobileCTA />
