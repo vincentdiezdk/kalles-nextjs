@@ -567,10 +567,10 @@ function BeforeAfterShowcase() {
       factBadge: "Holder op til 10 år med algebehandling",
     },
     {
-      before: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/tagrens-foer.webp",
-      after: "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/before-after/tagrens-efter.webp",
-      label: "Tagrens — betontag",
-      factBadge: "Op til 10 års garanti via serviceaftale",
+      before: "/images/before-after/terrasse-foer.webp",
+      after: "/images/before-after/terrasse-efter.webp",
+      label: "Træterrasse — før og efter rens",
+      factBadge: "Fra 50 kr./m² inkl. algebehandling",
     },
   ];
 
