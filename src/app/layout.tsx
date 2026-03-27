@@ -12,6 +12,7 @@ import ExitPopup from "@/components/exit-popup";
 import MobileCTA from "@/components/mobile-cta";
 import StickyCalculatorBar from "@/components/sticky-calculator-bar";
 import GlobalSchemas from "@/components/seo/global-schemas";
+import SocialProofToast from "@/components/social-proof-toast";
 
 const cabinetGrotesk = localFont({
   src: [
@@ -92,6 +93,7 @@ export default function RootLayout({
           </main>
           <Footer />
           <WhatsAppWidget />
+          <SocialProofToast />
           <ExitPopup />
           <MobileCTA />
           <StickyCalculatorBar />
