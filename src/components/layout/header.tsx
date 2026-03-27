@@ -19,17 +19,15 @@ import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useCampaignBannerVisible } from "@/components/campaign-banner";
 
-const LOGO_URL = "https://nmfyyudgfkuzyuklmtfv.supabase.co/storage/v1/object/public/images/logo-kalles-algerens.png";
-
 function KalleLogo({ className = "h-10 w-10" }: { className?: string }) {
   return (
-    <div className={`${className} rounded-lg bg-primary flex items-center justify-center overflow-hidden p-1`}>
-      <img
-        src={LOGO_URL}
-        alt="Kalles Algerens logo"
-        className="w-full h-full object-contain"
-        loading="eager"
-      />
+    <div
+      className={`${className} rounded-lg border-2 border-primary bg-background flex items-center justify-center`}
+      aria-label="Kalles Algerens logo"
+    >
+      <span className="font-sans font-extrabold text-primary" style={{ fontSize: '60%' }}>
+        KA
+      </span>
     </div>
   );
 }
