@@ -158,12 +158,12 @@ export default function Footer() {
             © {new Date().getFullYear()} Kalles Algerens ApS. Alle rettigheder forbeholdes.
           </p>
           <a
-            href="https://www.perplexity.ai/computer"
+            href="https://vincentdiez.com"
             target="_blank"
             rel="noopener noreferrer"
             className="text-xs text-background/40 hover:text-background/60 transition-colors"
           >
-            Created with Perplexity Computer
+            Lavet af Commercer ApS
           </a>
         </div>
       </div>
