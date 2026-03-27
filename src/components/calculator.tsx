@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, lazy, Suspense } from "react";
+import { useState, useEffect, useRef, lazy, Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -48,7 +48,6 @@ const serviceOptions: ServiceInfo[] = [
 ];
 
 // ─── Fliserens pricing ─────────────────────────────────
-// 30 kr/m² with minimum 75m² (= 2.250 kr flat for ≤75m²)
 const FLISER_BASE = 2250;
 const FLISER_THRESHOLD = 75;
 const FLISER_PER_M2 = 30;
@@ -63,50 +62,21 @@ interface Addon {
 }
 
 const fliserAddons: Addon[] = [
-  {
-    key: "nano",
-    label: "Nano imprægnering",
-    description: "Beskytter mod alger & snavs i op til 5 år",
-    icon: ShieldCheck,
-    fixedFee: 750,
-    perM2: 10,
-  },
-  {
-    key: "fugesandLevering",
-    label: "Levering af fugesand",
-    description: "Vi leverer og fylder ny fugesand",
-    icon: Truck,
-    fixedFee: 750,
-    perM2: 10,
-  },
-  {
-    key: "fugesandUdfejning",
-    label: "Udfejning af fugesand",
-    description: "Grundig udfejning af eksisterende fugesand",
-    icon: Shovel,
-    fixedFee: 375,
-    perM2: 5,
-  },
+  { key: "nano", label: "Nano imprægnering", description: "Beskytter mod alger & snavs i op til 5 år", icon: ShieldCheck, fixedFee: 750, perM2: 10 },
+  { key: "fugesandLevering", label: "Levering af fugesand", description: "Vi leverer og fylder ny fugesand", icon: Truck, fixedFee: 750, perM2: 10 },
+  { key: "fugesandUdfejning", label: "Udfejning af fugesand", description: "Grundig udfejning af eksisterende fugesand", icon: Shovel, fixedFee: 375, perM2: 5 },
 ];
 
 function calculateFliserPrice(area: number, activeAddons: Record<string, boolean>): number {
-  let total = area <= FLISER_THRESHOLD
-    ? FLISER_BASE
-    : FLISER_BASE + (area - FLISER_THRESHOLD) * FLISER_PER_M2;
-
+  let total = area <= FLISER_THRESHOLD ? FLISER_BASE : FLISER_BASE + (area - FLISER_THRESHOLD) * FLISER_PER_M2;
   for (const addon of fliserAddons) {
     if (!activeAddons[addon.key]) continue;
-    if (area <= FLISER_THRESHOLD) {
-      total += addon.fixedFee;
-    } else {
-      total += addon.fixedFee + (area - FLISER_THRESHOLD) * addon.perM2;
-    }
+    total += area <= FLISER_THRESHOLD ? addon.fixedFee : addon.fixedFee + (area - FLISER_THRESHOLD) * addon.perM2;
   }
   return total;
 }
 
 // ─── Træterrasse pricing ─────────────────────────────────
-// 50 kr/m² with minimum 50m² (= 2.500 kr flat for ≤50m²)
 const TERRASSE_BASE = 2500;
 const TERRASSE_THRESHOLD = 50;
 const TERRASSE_PER_M2 = 50;
@@ -114,34 +84,24 @@ const TERRASSE_PER_M2 = 50;
 const terrasseAddons: Addon[] = [];
 
 function calculateTerrassePrice(area: number, activeAddons: Record<string, boolean>): number {
-  let total = area <= TERRASSE_THRESHOLD
-    ? TERRASSE_BASE
-    : TERRASSE_BASE + (area - TERRASSE_THRESHOLD) * TERRASSE_PER_M2;
-
+  let total = area <= TERRASSE_THRESHOLD ? TERRASSE_BASE : TERRASSE_BASE + (area - TERRASSE_THRESHOLD) * TERRASSE_PER_M2;
   for (const addon of terrasseAddons) {
     if (!activeAddons[addon.key]) continue;
-    if (area <= TERRASSE_THRESHOLD) {
-      total += addon.fixedFee;
-    } else {
-      total += addon.fixedFee + (area - TERRASSE_THRESHOLD) * addon.perM2;
-    }
+    total += area <= TERRASSE_THRESHOLD ? addon.fixedFee : addon.fixedFee + (area - TERRASSE_THRESHOLD) * addon.perM2;
   }
   return total;
 }
 
-// ─── Algebehandling pricing (same for fliser & tag) ─────
-// 995 kr for ≤200m², +5 kr/m² above 200m², max 500m²
+// ─── Algebehandling pricing ─────────────────────────────
 const ALGE_BASE = 995;
 const ALGE_THRESHOLD = 200;
 const ALGE_PER_M2 = 5;
 
 function calculateAlgePrice(area: number): number {
-  return area <= ALGE_THRESHOLD
-    ? ALGE_BASE
-    : ALGE_BASE + (area - ALGE_THRESHOLD) * ALGE_PER_M2;
+  return area <= ALGE_THRESHOLD ? ALGE_BASE : ALGE_BASE + (area - ALGE_THRESHOLD) * ALGE_PER_M2;
 }
 
-// ─── Service config helper ──────────────────────────────
+// ─── Service config ──────────────────────────────────
 interface ServiceCalcConfig {
   areaLabel: string;
   measureLabel: string;
@@ -152,7 +112,7 @@ interface ServiceCalcConfig {
   addons: Addon[];
   threshold: number;
   calculatePrice: (area: number, addons: Record<string, boolean>) => number;
-  serviceFradrag: boolean; // fliserens & terrasse qualify, alge & tag don't
+  serviceFradrag: boolean;
   resultLabel: (area: number, addons: Record<string, boolean>) => string;
 }
 
@@ -160,35 +120,21 @@ function getServiceConfig(service: ServiceKey): ServiceCalcConfig | null {
   switch (service) {
     case "fliser":
       return {
-        areaLabel: "Fliserens areal",
-        measureLabel: "Opmål på luftfoto",
-        sliderMin: 30,
-        sliderMax: 500,
-        sliderStep: 1,
-        defaultArea: 75,
-        addons: fliserAddons,
-        threshold: FLISER_THRESHOLD,
-        calculatePrice: calculateFliserPrice,
-        serviceFradrag: true,
+        areaLabel: "Fliserens areal", measureLabel: "Opmål på luftfoto",
+        sliderMin: 30, sliderMax: 500, sliderStep: 1, defaultArea: 75,
+        addons: fliserAddons, threshold: FLISER_THRESHOLD,
+        calculatePrice: calculateFliserPrice, serviceFradrag: true,
         resultLabel: (area, addons) => {
-          const addonNames = Object.entries(addons).filter(([, v]) => v).map(([k]) =>
-            fliserAddons.find(a => a.key === k)?.label
-          ).filter(Boolean);
-          return `${area} m² fliserens${addonNames.length > 0 ? ` inkl. ${addonNames.join(", ")}` : ""}`;
+          const names = Object.entries(addons).filter(([, v]) => v).map(([k]) => fliserAddons.find(a => a.key === k)?.label).filter(Boolean);
+          return `${area} m² fliserens${names.length > 0 ? ` inkl. ${names.join(", ")}` : ""}`;
         },
       };
     case "terrasse":
       return {
-        areaLabel: "Terrasse areal",
-        measureLabel: "Opmål på luftfoto",
-        sliderMin: 10,
-        sliderMax: 300,
-        sliderStep: 1,
-        defaultArea: 50,
-        addons: terrasseAddons,
-        threshold: TERRASSE_THRESHOLD,
-        calculatePrice: calculateTerrassePrice,
-        serviceFradrag: true,
+        areaLabel: "Terrasse areal", measureLabel: "Opmål på luftfoto",
+        sliderMin: 10, sliderMax: 300, sliderStep: 1, defaultArea: 50,
+        addons: terrasseAddons, threshold: TERRASSE_THRESHOLD,
+        calculatePrice: calculateTerrassePrice, serviceFradrag: true,
         resultLabel: (area, addons) => {
           const hasImpraeg = addons["impraegnering"];
           return `${area} m² træterrasse rens${hasImpraeg ? " inkl. imprægnering" : ""}`;
@@ -196,30 +142,18 @@ function getServiceConfig(service: ServiceKey): ServiceCalcConfig | null {
       };
     case "algeFliser":
       return {
-        areaLabel: "Flise-areal til algebehandling",
-        measureLabel: "Opmål på luftfoto",
-        sliderMin: 50,
-        sliderMax: 500,
-        sliderStep: 5,
-        defaultArea: 150,
-        addons: [],
-        threshold: ALGE_THRESHOLD,
-        calculatePrice: (area) => calculateAlgePrice(area),
-        serviceFradrag: false,
+        areaLabel: "Flise-areal til algebehandling", measureLabel: "Opmål på luftfoto",
+        sliderMin: 50, sliderMax: 500, sliderStep: 5, defaultArea: 150,
+        addons: [], threshold: ALGE_THRESHOLD,
+        calculatePrice: (area) => calculateAlgePrice(area), serviceFradrag: false,
         resultLabel: (area) => `${area} m² algebehandling — fliser`,
       };
     case "algeTag":
       return {
-        areaLabel: "Tag-areal til algebehandling",
-        measureLabel: "Opmål tag på luftfoto",
-        sliderMin: 50,
-        sliderMax: 500,
-        sliderStep: 5,
-        defaultArea: 150,
-        addons: [],
-        threshold: ALGE_THRESHOLD,
-        calculatePrice: (area) => calculateAlgePrice(area),
-        serviceFradrag: false,
+        areaLabel: "Tag-areal til algebehandling", measureLabel: "Opmål tag på luftfoto",
+        sliderMin: 50, sliderMax: 500, sliderStep: 5, defaultArea: 150,
+        addons: [], threshold: ALGE_THRESHOLD,
+        calculatePrice: (area) => calculateAlgePrice(area), serviceFradrag: false,
         resultLabel: (area) => `${area} m² algebehandling — tag`,
       };
     default:
@@ -227,7 +161,6 @@ function getServiceConfig(service: ServiceKey): ServiceCalcConfig | null {
   }
 }
 
-// Static prices for non-calculator services
 function getStaticEstimate(service: ServiceKey, area: number): number {
   switch (service) {
     case "facade": return Math.max(2997, area * 40);
@@ -243,15 +176,17 @@ interface CalculatorProps {
 
 export { type ServiceKey };
 
+// ─── Progress bar labels ──────────────────────────────
+const STEP_LABELS = ["Vælg service", "Detaljer", "Oplysninger"];
+
 export default function Calculator({ initialService, heading, subheading }: CalculatorProps = {}) {
   const hasInitialService = !!initialService;
-  const [step, setStep] = useState(hasInitialService ? (serviceOptions.find(s => s.key === initialService)?.hasCalculator ? 2 : 3) : 1);
-  const [service, setService] = useState<ServiceKey | null>(initialService ?? null);
-
-  // Area — initialized per service in handleNext or via default
   const initConfig = initialService ? getServiceConfig(initialService) : null;
-  const [area, setArea] = useState<number>(initConfig?.defaultArea ?? 75);
+  const initHasCalc = serviceOptions.find(s => s.key === initialService)?.hasCalculator ?? false;
 
+  const [step, setStep] = useState(hasInitialService ? (initHasCalc ? 2 : 3) : 1);
+  const [service, setService] = useState<ServiceKey | null>(initialService ?? null);
+  const [area, setArea] = useState<number>(initConfig?.defaultArea ?? 75);
   const [activeAddons, setActiveAddons] = useState<Record<string, boolean>>({});
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -265,17 +200,17 @@ export default function Calculator({ initialService, heading, subheading }: Calc
   const [submitted, setSubmitted] = useState(false);
   const [gdprConsent, setGdprConsent] = useState(false);
 
+  const sectionRef = useRef<HTMLElement>(null);
+
   const hasCalculator = serviceOptions.find(s => s.key === service)?.hasCalculator ?? false;
   const config = service ? getServiceConfig(service) : null;
 
-  // Live price calculation for all calculator services
+  // Live price calculation
   const livePrice = config ? config.calculatePrice(area, activeAddons) : null;
-
-  // Moms (25% dansk moms, included in price)
   const momsAmount = livePrice !== null ? Math.round(livePrice * 0.2) : null;
   const priceExMoms = livePrice !== null && momsAmount !== null ? livePrice - momsAmount : null;
 
-  // Servicefradrag 2026
+  // Servicefradrag
   const SERVICE_FRADRAG_MAX = 18300;
   const FRADRAG_SKAT_PCTG = 0.26;
   const LABOR_SHARE = 0.75;
@@ -285,53 +220,71 @@ export default function Calculator({ initialService, heading, subheading }: Calc
   const skattebesparelse = fradragBase !== null ? Math.round(fradragBase * FRADRAG_SKAT_PCTG) : null;
   const effectivePrice = livePrice !== null && skattebesparelse !== null ? livePrice - skattebesparelse : null;
 
+  // Scroll to top of calculator on step change
+  useEffect(() => {
+    if (step > 1) {
+      sectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [step]);
+
+  // ─── Auto-advance: click service → go to next step ────
+  const selectService = (key: ServiceKey) => {
+    setService(key);
+    const svcConfig = getServiceConfig(key);
+    const svcHasCalc = serviceOptions.find(s => s.key === key)?.hasCalculator ?? false;
+
+    if (svcConfig) {
+      setArea(svcConfig.defaultArea);
+    }
+    setActiveAddons({});
+
+    // Auto-advance after short delay for visual feedback
+    setTimeout(() => {
+      if (svcHasCalc) {
+        setStep(2);
+      } else {
+        setStep(3);
+      }
+    }, 200);
+  };
+
   const canNext = () => {
-    if (step === 1) return !!service;
     if (step === 2) return area > 0;
     if (step === 3) return name.trim() !== "" && phone.trim() !== "" && gdprConsent;
     return false;
   };
 
   const handleNext = () => {
-    if (step === 1) {
-      // When selecting a service in step 1, set default area for that service
-      const svcConfig = service ? getServiceConfig(service) : null;
-      if (svcConfig) {
-        setArea(svcConfig.defaultArea);
-      }
-
-      if (service && !hasCalculator) {
-        setStep(3);
-      } else {
-        setStep(2);
-      }
-    } else if (step < 3) {
-      setStep(step + 1);
-    } else {
+    if (step === 2) {
+      setStep(3);
+    } else if (step === 3) {
       handleSubmit();
     }
   };
 
   const handleBack = () => {
-    if (hasInitialService && step === 2) return;
-    if (step === 3 && service && !hasCalculator) {
-      if (hasInitialService) return;
+    if (hasInitialService) {
+      if (step === 3 && hasCalculator) {
+        setStep(2);
+      }
+      // Can't go back further when pre-selected
+      return;
+    }
+    if (step === 3 && !hasCalculator) {
       setStep(1);
-    } else {
-      setStep(step - 1);
+    } else if (step === 3) {
+      setStep(2);
+    } else if (step === 2) {
+      setStep(1);
     }
   };
 
   const handleSubmit = async () => {
     if (!service || !name.trim() || !phone.trim()) return;
-
-    const estimated = config
-      ? config.calculatePrice(area, activeAddons)
-      : getStaticEstimate(service, area || 50);
+    const estimated = config ? config.calculatePrice(area, activeAddons) : getStaticEstimate(service, area || 50);
     setPrice(estimated);
     setSubmitting(true);
 
-    // Build condition string
     let condition: string | null = null;
     if (config && config.addons.length > 0) {
       condition = Object.entries(activeAddons).filter(([, v]) => v).map(([k]) => k).join(",") || "ingen tilvalg";
@@ -342,20 +295,14 @@ export default function Calculator({ initialService, heading, subheading }: Calc
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          service,
-          areaM2: hasCalculator ? (area || null) : null,
-          condition,
-          estimatedPrice: estimated,
-          name: name.trim(),
-          phone: phone.trim(),
+          service, areaM2: hasCalculator ? (area || null) : null, condition,
+          estimatedPrice: estimated, name: name.trim(), phone: phone.trim(),
           email: email.trim() || undefined,
           address: [address.trim(), postNr.trim()].filter(Boolean).join(", ") || undefined,
           sourcePage: "calculator",
         }),
       });
-    } catch {
-      // Continue even if API fails
-    }
+    } catch { /* Continue even if API fails */ }
     setSubmitting(false);
     setSubmitted(true);
     setStep(4);
@@ -374,26 +321,30 @@ export default function Calculator({ initialService, heading, subheading }: Calc
       setArea(75);
     }
     setActiveAddons({});
-    setName("");
-    setPhone("");
-    setEmail("");
-    setAddress("");
-    setPostNr("");
-    setShowMeasurementTool(false);
-    setAreaFromTool(false);
-    setGdprConsent(false);
-    setPrice(null);
-    setSubmitted(false);
+    setName(""); setPhone(""); setEmail(""); setAddress(""); setPostNr("");
+    setShowMeasurementTool(false); setAreaFromTool(false); setGdprConsent(false);
+    setPrice(null); setSubmitted(false);
   };
 
   const toggleAddon = (key: string) => {
     setActiveAddons(prev => ({ ...prev, [key]: !prev[key] }));
   };
 
+  // ─── Determine which steps to show in progress bar ────
+  // Always show 3 steps (even for pre-selected services, just offset the labels)
+  const progressSteps = hasInitialService
+    ? (initHasCalc ? [2, 3] : [3])
+    : [1, 2, 3];
+
+  const progressLabels = hasInitialService
+    ? (initHasCalc ? ["Detaljer", "Oplysninger"] : ["Oplysninger"])
+    : ["Service", "Detaljer", "Oplysninger"];
+
   return (
     <section
+      ref={sectionRef}
       id="prisberegner"
-      className="py-16 md:py-24 bg-primary/[0.03]"
+      className="py-16 md:py-24 bg-primary/[0.03] scroll-mt-20"
       data-testid="calculator-section"
     >
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -411,40 +362,55 @@ export default function Calculator({ initialService, heading, subheading }: Calc
           </div>
         </div>
 
-        {/* Progress Steps */}
-        <div className="flex items-center justify-center gap-2 mb-8">
-          {(hasInitialService
-            ? (hasCalculator ? [2, 3] : [3])
-            : (hasCalculator ? [1, 2, 3] : [1, 3])
-          ).map((s, idx, arr) => (
-            <div key={s} className="flex items-center gap-2">
-              <div
-                className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-colors ${
-                  step >= s
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-muted text-muted-foreground"
-                }`}
-              >
-                {step > s ? "✓" : idx + 1}
-              </div>
-              {idx < arr.length - 1 && (
-                <div
-                  className={`w-12 sm:w-20 h-0.5 transition-colors ${
-                    step > s ? "bg-primary" : "bg-muted"
-                  }`}
-                />
-              )}
-            </div>
-          ))}
-        </div>
+        {/* Progress Steps — always consistent */}
+        {step < 4 && (
+          <div className="flex items-center justify-center gap-0 mb-8">
+            {progressSteps.map((s, idx) => {
+              const isActive = step >= s;
+              const isDone = step > s;
+              return (
+                <div key={s} className="flex items-center">
+                  <div className="flex flex-col items-center">
+                    <div
+                      className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
+                        isDone
+                          ? "bg-primary text-primary-foreground"
+                          : isActive
+                          ? "bg-primary text-primary-foreground ring-4 ring-primary/20"
+                          : "bg-muted text-muted-foreground"
+                      }`}
+                    >
+                      {isDone ? "✓" : idx + 1}
+                    </div>
+                    <span className={`text-[10px] mt-1.5 font-medium transition-colors ${
+                      isActive ? "text-primary" : "text-muted-foreground"
+                    }`}>
+                      {progressLabels[idx]}
+                    </span>
+                  </div>
+                  {idx < progressSteps.length - 1 && (
+                    <div
+                      className={`w-14 sm:w-24 h-0.5 mx-1 mb-5 transition-colors duration-300 ${
+                        step > s ? "bg-primary" : "bg-muted"
+                      }`}
+                    />
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        )}
 
         <div className="bg-card rounded-2xl shadow-sm border border-border p-6 md:p-8">
-          {/* Step 1: Service */}
+          {/* Step 1: Service — click = auto-advance */}
           {step === 1 && (
             <div className="space-y-4" data-testid="calc-step-1">
-              <h3 className="font-sans font-bold text-lg text-foreground mb-4">
-                1. Vælg service
+              <h3 className="font-sans font-bold text-lg text-foreground mb-2">
+                Hvad skal vi hjælpe med?
               </h3>
+              <p className="text-sm text-muted-foreground mb-4">
+                Vælg en service for at komme videre.
+              </p>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 {serviceOptions.map((opt) => {
                   const Icon = opt.icon;
@@ -452,7 +418,7 @@ export default function Calculator({ initialService, heading, subheading }: Calc
                   return (
                     <button
                       key={opt.key}
-                      onClick={() => setService(opt.key)}
+                      onClick={() => selectService(opt.key)}
                       className={`p-4 rounded-xl border-2 text-left transition-all hover:-translate-y-0.5 ${
                         selected
                           ? "border-primary bg-primary/5 shadow-sm"
@@ -460,45 +426,35 @@ export default function Calculator({ initialService, heading, subheading }: Calc
                       }`}
                       data-testid={`calc-service-${opt.key}`}
                     >
-                      <Icon
-                        className={`h-6 w-6 mb-2 ${
-                          selected ? "text-primary" : "text-muted-foreground"
-                        }`}
-                      />
-                      <div className="font-sans font-semibold text-sm text-foreground">
-                        {opt.label}
-                      </div>
-                      <div className="text-xs text-muted-foreground mt-0.5">
-                        {opt.description}
-                      </div>
+                      <Icon className={`h-6 w-6 mb-2 ${selected ? "text-primary" : "text-muted-foreground"}`} />
+                      <div className="font-sans font-semibold text-sm text-foreground">{opt.label}</div>
+                      <div className="text-xs text-muted-foreground mt-0.5">{opt.description}</div>
                       {!opt.hasCalculator && opt.staticPrice && (
-                        <div className="text-xs font-medium text-primary mt-1">
-                          {opt.staticPrice}
-                        </div>
+                        <div className="text-xs font-medium text-primary mt-1">{opt.staticPrice}</div>
                       )}
                     </button>
                   );
                 })}
               </div>
-
-              {/* Show note for non-calculator services */}
-              {service && !hasCalculator && (
-                <div className="bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/30 rounded-lg p-3 mt-4">
-                  <p className="text-xs text-amber-800 dark:text-amber-300">
-                    Pris for {serviceOptions.find(s => s.key === service)?.label} varierer.
-                    Udfyld dine oplysninger, og vi sender et præcist tilbud inden 24 timer.
-                  </p>
-                </div>
-              )}
             </div>
           )}
 
-          {/* Step 2: Area + Add-ons (for all calculator services) */}
+          {/* Step 2: Area + Add-ons */}
           {step === 2 && config && (
             <div className="space-y-6" data-testid="calc-step-2">
-              <h3 className="font-sans font-bold text-lg text-foreground mb-4">
-                {hasInitialService ? "1" : "2"}. Areal & tilvalg
-              </h3>
+              {/* Selected service chip */}
+              <div className="flex items-center justify-between">
+                <h3 className="font-sans font-bold text-lg text-foreground">
+                  Areal & tilvalg
+                </h3>
+                <button
+                  onClick={() => { setStep(1); setService(null); }}
+                  className="text-xs text-primary hover:underline font-medium flex items-center gap-1"
+                  data-testid="calc-change-service"
+                >
+                  {serviceOptions.find(s => s.key === service)?.label} — skift
+                </button>
+              </div>
 
               {/* Area slider */}
               <div>
@@ -523,15 +479,9 @@ export default function Calculator({ initialService, heading, subheading }: Calc
                 </div>
                 <Slider
                   value={[area]}
-                  onValueChange={([v]) => {
-                    setArea(v);
-                    setAreaFromTool(false);
-                  }}
-                  min={config.sliderMin}
-                  max={config.sliderMax}
-                  step={config.sliderStep}
-                  className="w-full"
-                  data-testid="calc-area-slider"
+                  onValueChange={([v]) => { setArea(v); setAreaFromTool(false); }}
+                  min={config.sliderMin} max={config.sliderMax} step={config.sliderStep}
+                  className="w-full" data-testid="calc-area-slider"
                 />
                 <div className="flex justify-between text-xs text-muted-foreground mt-1">
                   <span>{config.sliderMin} m²</span>
@@ -539,49 +489,32 @@ export default function Calculator({ initialService, heading, subheading }: Calc
                 </div>
                 {areaFromTool && area > 0 && (
                   <p className="text-xs text-primary font-medium mt-1.5 flex items-center gap-1">
-                    <CheckCircle2 className="h-3 w-3" />
-                    Opmålt fra luftfoto
+                    <CheckCircle2 className="h-3 w-3" /> Opmålt fra luftfoto
                   </p>
                 )}
               </div>
 
-              {/* Measurement tool toggle */}
+              {/* Measurement tool */}
               {!showMeasurementTool && (
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setShowMeasurementTool(true)}
-                  className="gap-1.5 text-xs"
-                  data-testid="calc-open-measurement"
-                >
-                  <Ruler className="h-3.5 w-3.5" />
-                  {config.measureLabel}
+                <Button type="button" variant="outline" size="sm" onClick={() => setShowMeasurementTool(true)} className="gap-1.5 text-xs" data-testid="calc-open-measurement">
+                  <Ruler className="h-3.5 w-3.5" /> {config.measureLabel}
                 </Button>
               )}
-
               {showMeasurementTool && (
                 <div className="border border-border rounded-xl p-4 bg-muted/30">
-                  <Suspense
-                    fallback={
-                      <div className="flex items-center justify-center py-12">
-                        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-                      </div>
-                    }
-                  >
+                  <Suspense fallback={<div className="flex items-center justify-center py-12"><Loader2 className="h-6 w-6 animate-spin text-muted-foreground" /></div>}>
                     <AreaMeasurementTool
                       initialAddress={address}
                       onAreaConfirmed={(m2) => {
                         setArea(Math.min(config.sliderMax, Math.max(config.sliderMin, m2)));
-                        setAreaFromTool(true);
-                        setShowMeasurementTool(false);
+                        setAreaFromTool(true); setShowMeasurementTool(false);
                       }}
                     />
                   </Suspense>
                 </div>
               )}
 
-              {/* Add-ons (if any) */}
+              {/* Add-ons */}
               {config.addons.length > 0 && (
                 <div>
                   <Label className="text-sm font-medium mb-3 block">Tilvalg</Label>
@@ -595,35 +528,21 @@ export default function Calculator({ initialService, heading, subheading }: Calc
                       return (
                         <div
                           key={addon.key}
-                          className={`flex items-center justify-between p-4 rounded-xl border-2 transition-all cursor-pointer ${
-                            active
-                              ? "border-primary bg-primary/5"
-                              : "border-border hover:border-primary/20"
-                          }`}
+                          className={`flex items-center justify-between p-4 rounded-xl border-2 transition-all cursor-pointer ${active ? "border-primary bg-primary/5" : "border-border hover:border-primary/20"}`}
                           onClick={() => toggleAddon(addon.key)}
                           data-testid={`calc-addon-${addon.key}`}
                         >
                           <div className="flex items-center gap-3">
                             <Icon className={`h-5 w-5 shrink-0 ${active ? "text-primary" : "text-muted-foreground"}`} />
                             <div>
-                              <div className="font-sans font-semibold text-sm text-foreground">
-                                {addon.label}
-                              </div>
-                              <div className="text-xs text-muted-foreground">
-                                {addon.description}
-                              </div>
+                              <div className="font-sans font-semibold text-sm text-foreground">{addon.label}</div>
+                              <div className="text-xs text-muted-foreground">{addon.description}</div>
                             </div>
                           </div>
                           <div className="flex items-center gap-3">
-                            <span className="text-sm font-semibold text-foreground whitespace-nowrap">
-                              + {addonPrice.toLocaleString("da-DK")} kr.
-                            </span>
+                            <span className="text-sm font-semibold text-foreground whitespace-nowrap">+ {addonPrice.toLocaleString("da-DK")} kr.</span>
                             <div onClick={(e) => e.stopPropagation()}>
-                              <Switch
-                                checked={active}
-                                onCheckedChange={() => toggleAddon(addon.key)}
-                                aria-label={addon.label}
-                              />
+                              <Switch checked={active} onCheckedChange={() => toggleAddon(addon.key)} aria-label={addon.label} />
                             </div>
                           </div>
                         </div>
@@ -640,11 +559,8 @@ export default function Calculator({ initialService, heading, subheading }: Calc
                   <div className="text-2xl md:text-3xl font-sans font-extrabold text-primary">
                     kr {livePrice.toLocaleString("da-DK")}
                   </div>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    {config.resultLabel(area, activeAddons)}
-                  </p>
+                  <p className="text-xs text-muted-foreground mt-1">{config.resultLabel(area, activeAddons)}</p>
 
-                  {/* Moms breakdown */}
                   {momsAmount !== null && priceExMoms !== null && (
                     <div className="mt-3 pt-3 border-t border-primary/10 flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
                       <Receipt className="h-3 w-3" />
@@ -654,7 +570,6 @@ export default function Calculator({ initialService, heading, subheading }: Calc
                     </div>
                   )}
 
-                  {/* Servicefradrag (only for qualifying services) */}
                   {showFradrag && skattebesparelse !== null && skattebesparelse > 0 && effectivePrice !== null && (
                     <div className="mt-3 pt-3 border-t border-primary/10">
                       <div className="flex items-center justify-center gap-1.5 text-xs font-medium text-emerald-700 dark:text-emerald-400">
@@ -680,25 +595,16 @@ export default function Calculator({ initialService, heading, subheading }: Calc
           {step === 3 && (
             <div className="space-y-4" data-testid="calc-step-3">
               <h3 className="font-sans font-bold text-lg text-foreground mb-4">
-                {hasInitialService
-                  ? (hasCalculator ? "2" : "1")
-                  : (hasCalculator ? "3" : "2")
-                }. Dine oplysninger
+                Dine oplysninger
               </h3>
 
-              {/* Show selected service + price summary for calculator services */}
+              {/* Summary of selected service + price */}
               {hasCalculator && livePrice !== null && config && (
                 <div className="bg-primary/5 border border-primary/20 rounded-lg p-3 mb-4 flex items-center justify-between">
-                  <span className="text-sm text-foreground font-medium">
-                    {config.resultLabel(area, activeAddons)}
-                  </span>
-                  <span className="text-sm font-bold text-primary">
-                    kr {livePrice.toLocaleString("da-DK")}
-                  </span>
+                  <span className="text-sm text-foreground font-medium">{config.resultLabel(area, activeAddons)}</span>
+                  <span className="text-sm font-bold text-primary">kr {livePrice.toLocaleString("da-DK")}</span>
                 </div>
               )}
-
-              {/* Show selected service for non-calculator */}
               {!hasCalculator && service && (
                 <div className="bg-primary/5 border border-primary/20 rounded-lg p-3 mb-4">
                   <span className="text-sm text-foreground font-medium">
@@ -709,90 +615,32 @@ export default function Calculator({ initialService, heading, subheading }: Calc
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="calc-name" className="text-sm font-medium mb-1.5 block">
-                    Navn *
-                  </Label>
-                  <Input
-                    id="calc-name"
-                    placeholder="Dit fulde navn"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    required
-                    autoComplete="name"
-                    data-testid="calc-name-input"
-                  />
+                  <Label htmlFor="calc-name" className="text-sm font-medium mb-1.5 block">Navn *</Label>
+                  <Input id="calc-name" placeholder="Dit fulde navn" value={name} onChange={(e) => setName(e.target.value)} required autoComplete="name" data-testid="calc-name-input" />
                 </div>
                 <div>
-                  <Label htmlFor="calc-email" className="text-sm font-medium mb-1.5 block">
-                    Email *
-                  </Label>
-                  <Input
-                    id="calc-email"
-                    type="email"
-                    placeholder="Din email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    autoComplete="email"
-                    data-testid="calc-email-input"
-                  />
+                  <Label htmlFor="calc-email" className="text-sm font-medium mb-1.5 block">Email *</Label>
+                  <Input id="calc-email" type="email" placeholder="Din email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" data-testid="calc-email-input" />
                 </div>
                 <div>
-                  <Label htmlFor="calc-phone" className="text-sm font-medium mb-1.5 block">
-                    Telefon *
-                  </Label>
-                  <Input
-                    id="calc-phone"
-                    type="tel"
-                    placeholder="Dit telefonnummer"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    required
-                    autoComplete="tel"
-                    data-testid="calc-phone-input"
-                  />
+                  <Label htmlFor="calc-phone" className="text-sm font-medium mb-1.5 block">Telefon *</Label>
+                  <Input id="calc-phone" type="tel" placeholder="Dit telefonnummer" value={phone} onChange={(e) => setPhone(e.target.value)} required autoComplete="tel" data-testid="calc-phone-input" />
                 </div>
                 <div>
-                  <Label htmlFor="calc-address" className="text-sm font-medium mb-1.5 block">
-                    Adresse *
-                  </Label>
-                  <Input
-                    id="calc-address"
-                    placeholder="Din adresse"
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
-                    autoComplete="street-address"
-                    data-testid="calc-address-input"
-                  />
+                  <Label htmlFor="calc-address" className="text-sm font-medium mb-1.5 block">Adresse *</Label>
+                  <Input id="calc-address" placeholder="Din adresse" value={address} onChange={(e) => setAddress(e.target.value)} autoComplete="street-address" data-testid="calc-address-input" />
                 </div>
                 <div>
-                  <Label htmlFor="calc-postnr" className="text-sm font-medium mb-1.5 block">
-                    Post nr. *
-                  </Label>
-                  <Input
-                    id="calc-postnr"
-                    placeholder="F.eks. 7330"
-                    value={postNr}
-                    onChange={(e) => setPostNr(e.target.value)}
-                    autoComplete="postal-code"
-                    data-testid="calc-postnr-input"
-                  />
+                  <Label htmlFor="calc-postnr" className="text-sm font-medium mb-1.5 block">Post nr. *</Label>
+                  <Input id="calc-postnr" placeholder="F.eks. 7330" value={postNr} onChange={(e) => setPostNr(e.target.value)} autoComplete="postal-code" data-testid="calc-postnr-input" />
                 </div>
               </div>
 
-              {/* GDPR samtykke-checkbox */}
               <label className="flex items-start gap-3 cursor-pointer mt-2" data-testid="calc-gdpr-consent">
-                <input
-                  type="checkbox"
-                  checked={gdprConsent}
-                  onChange={(e) => setGdprConsent(e.target.checked)}
-                  className="mt-0.5 h-4 w-4 rounded border-border text-primary focus:ring-primary shrink-0"
-                />
+                <input type="checkbox" checked={gdprConsent} onChange={(e) => setGdprConsent(e.target.checked)} className="mt-0.5 h-4 w-4 rounded border-border text-primary focus:ring-primary shrink-0" />
                 <span className="text-xs text-muted-foreground leading-relaxed">
-                  Jeg accepterer at Kalles Algerens kontakter mig vedr. mit tilbud.
-                  Læs vores{" "}
-                  <a href="/privatlivspolitik" target="_blank" rel="noopener noreferrer" className="text-primary underline hover:text-primary/80">
-                    privatlivspolitik
-                  </a>.
+                  Jeg accepterer at Kalles Algerens kontakter mig vedr. mit tilbud. Læs vores{" "}
+                  <a href="/privatlivspolitik" target="_blank" rel="noopener noreferrer" className="text-primary underline hover:text-primary/80">privatlivspolitik</a>.
                 </span>
               </label>
             </div>
@@ -810,10 +658,7 @@ export default function Calculator({ initialService, heading, subheading }: Calc
                   <div className="text-4xl md:text-5xl font-sans font-extrabold text-primary mb-2">
                     kr {price.toLocaleString("da-DK")}
                   </div>
-                  <p className="text-sm text-muted-foreground mb-1">
-                    {config.resultLabel(area, activeAddons)}
-                  </p>
-                  {/* Moms + fradrag in result */}
+                  <p className="text-sm text-muted-foreground mb-1">{config.resultLabel(area, activeAddons)}</p>
                   {(() => {
                     const resMoms = Math.round(price * 0.2);
                     const resExMoms = price - resMoms;
@@ -824,8 +669,7 @@ export default function Calculator({ initialService, heading, subheading }: Calc
                     return (
                       <div className="mt-2 space-y-1">
                         <p className="text-xs text-muted-foreground flex items-center justify-center gap-1">
-                          <Receipt className="h-3 w-3" />
-                          Heraf moms: {resMoms.toLocaleString("da-DK")} kr.
+                          <Receipt className="h-3 w-3" /> Heraf moms: {resMoms.toLocaleString("da-DK")} kr.
                         </p>
                         {showResFradrag && resSkat > 0 && (
                           <>
@@ -836,9 +680,7 @@ export default function Calculator({ initialService, heading, subheading }: Calc
                             <p className="text-xs text-muted-foreground">
                               Reel pris efter fradrag: <span className="font-semibold text-foreground">kr {(price - resSkat).toLocaleString("da-DK")}</span>
                             </p>
-                            <Link href="/servicefradrag" className="text-[10px] text-primary underline hover:text-primary/80 transition-colors">
-                              Læs mere om servicefradrag →
-                            </Link>
+                            <Link href="/servicefradrag" className="text-[10px] text-primary underline hover:text-primary/80 transition-colors">Læs mere om servicefradrag →</Link>
                           </>
                         )}
                       </div>
@@ -847,49 +689,29 @@ export default function Calculator({ initialService, heading, subheading }: Calc
                 </>
               ) : (
                 <p className="text-sm text-muted-foreground mb-2">
-                  Vi sender dig et præcist tilbud på{" "}
-                  {serviceOptions.find(s => s.key === service)?.label?.toLowerCase()} inden 24 timer.
+                  Vi sender dig et præcist tilbud på {serviceOptions.find(s => s.key === service)?.label?.toLowerCase()} inden 24 timer.
                 </p>
               )}
-              <p className="text-sm text-muted-foreground mb-4 max-w-md mx-auto">
-                Endeligt tilbud inden 24 timer.
-              </p>
-              {/* Urgency / next step */}
+              <p className="text-sm text-muted-foreground mb-4 max-w-md mx-auto">Endeligt tilbud inden 24 timer.</p>
               <div className="bg-primary/5 border border-primary/20 rounded-xl p-4 mb-6 max-w-md mx-auto">
-                <p className="text-sm font-semibold text-foreground mb-1">
-                  ✅ Tak, {name.split(" ")[0]}! Vi ringer dig op.
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  Du hører fra Kasper inden 24 timer med et endeligt tilbud.
-                  Vil du hurtigere svar? Ring direkte.
-                </p>
+                <p className="text-sm font-semibold text-foreground mb-1">✅ Tak, {name.split(" ")[0]}! Vi ringer dig op.</p>
+                <p className="text-xs text-muted-foreground">Du hører fra Kasper inden 24 timer med et endeligt tilbud. Vil du hurtigere svar? Ring direkte.</p>
               </div>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <a href="tel:+4525131797" data-testid="calc-result-phone">
-                  <Button className="gap-2 w-full sm:w-auto font-semibold">
-                    <Phone className="h-4 w-4" />
-                    Ring nu — 25 13 17 97
-                  </Button>
+                  <Button className="gap-2 w-full sm:w-auto font-semibold"><Phone className="h-4 w-4" /> Ring nu — 25 13 17 97</Button>
                 </a>
-                <Button onClick={reset} variant="outline" data-testid="calc-result-reset">
-                  Beregn ny pris
-                </Button>
+                <Button onClick={reset} variant="outline" data-testid="calc-result-reset">Beregn ny pris</Button>
               </div>
             </div>
           )}
 
-          {/* Navigation */}
-          {step < 4 && (
+          {/* Navigation — only show on steps 2 and 3 (step 1 auto-advances) */}
+          {step >= 2 && step < 4 && (
             <div className="flex items-center justify-between mt-8 pt-6 border-t border-border">
-              {step > 1 && !(hasInitialService && ((hasCalculator && step === 2) || (!hasCalculator && step === 3))) ? (
-                <Button
-                  variant="ghost"
-                  onClick={handleBack}
-                  className="gap-1"
-                  data-testid="calc-back"
-                >
-                  <ArrowLeft className="h-4 w-4" />
-                  Tilbage
+              {!(hasInitialService && ((hasCalculator && step === 2) || (!hasCalculator && step === 3))) ? (
+                <Button variant="ghost" onClick={handleBack} className="gap-1" data-testid="calc-back">
+                  <ArrowLeft className="h-4 w-4" /> Tilbage
                 </Button>
               ) : (
                 <div />
@@ -900,11 +722,7 @@ export default function Calculator({ initialService, heading, subheading }: Calc
                 className="gap-1 font-semibold"
                 data-testid="calc-next"
               >
-                {submitting
-                  ? "Sender..."
-                  : step === 3
-                  ? (hasCalculator ? "Se din pris" : "Få tilbud")
-                  : "Næste"}
+                {submitting ? "Sender..." : step === 3 ? (hasCalculator ? "Se din pris" : "Få tilbud") : "Næste"}
                 {!submitting && <ArrowRight className="h-4 w-4" />}
               </Button>
             </div>
