@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
 import { forwardLeadToAdmin } from "@/lib/webhook";
+import { sendContactNotificationToKasper } from "@/lib/email";
 import { z } from "zod";
 
 const contactSchema = z.object({
@@ -42,6 +43,16 @@ export async function POST(request: Request) {
       service: parsed.service || undefined,
       message: parsed.message || undefined,
       source: "kontaktformular",
+    });
+
+    // Send email notification (non-blocking)
+    void sendContactNotificationToKasper({
+      name: parsed.name,
+      phone: parsed.phone,
+      email: parsed.email || undefined,
+      service: parsed.service || undefined,
+      message: parsed.message || undefined,
+      sourcePage: parsed.sourcePage || undefined,
     });
 
     return NextResponse.json({ success: true, id: data.id });

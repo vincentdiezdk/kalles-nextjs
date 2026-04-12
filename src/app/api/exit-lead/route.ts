@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
 import { forwardLeadToAdmin } from "@/lib/webhook";
+import { sendExitLeadNotificationToKasper } from "@/lib/email";
 import { z } from "zod";
 
 const exitLeadSchema = z.object({
@@ -33,6 +34,13 @@ export async function POST(request: Request) {
       name: parsed.name || "Ukendt",
       phone: parsed.phone,
       source: "exit_intent",
+    });
+
+    // Send email notification (non-blocking)
+    void sendExitLeadNotificationToKasper({
+      name: parsed.name || undefined,
+      phone: parsed.phone,
+      sourcePage: parsed.sourcePage || undefined,
     });
 
     return NextResponse.json({ success: true, id: data.id });

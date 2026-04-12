@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
 import { forwardLeadToAdmin } from "@/lib/webhook";
+import { sendLeadNotificationToKasper, sendCustomerConfirmation } from "@/lib/email";
 import { z } from "zod";
 
 const leadSchema = z.object({
@@ -51,6 +52,30 @@ export async function POST(request: Request) {
       estimated_price: parsed.estimatedPrice,
       source: "prisberegner",
     });
+
+    // Send email notifications (non-blocking)
+    void sendLeadNotificationToKasper({
+      name: parsed.name,
+      phone: parsed.phone,
+      email: parsed.email || undefined,
+      address: parsed.address || undefined,
+      service: parsed.service,
+      areaM2: parsed.areaM2,
+      condition: parsed.condition,
+      estimatedPrice: parsed.estimatedPrice,
+      sourcePage: parsed.sourcePage,
+    });
+
+    // Send confirmation to customer if they provided an email
+    if (parsed.email) {
+      void sendCustomerConfirmation({
+        name: parsed.name,
+        email: parsed.email,
+        service: parsed.service,
+        areaM2: parsed.areaM2,
+        estimatedPrice: parsed.estimatedPrice,
+      });
+    }
 
     return NextResponse.json({ success: true, estimatedPrice: data.estimated_price, id: data.id });
   } catch (error: any) {
